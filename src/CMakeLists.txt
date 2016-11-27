@@ -15,3 +15,6 @@ target_link_libraries(z_trans_test "-pthread")
 add_executable(rescale rescale.cpp digital_filter.h digital_filter.cpp)
 target_link_libraries(rescale "-lX11")
 target_link_libraries(rescale "-pthread")
+
+add_executable(first_test first_test.cpp)
+
