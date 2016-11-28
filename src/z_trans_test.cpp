@@ -6,7 +6,7 @@ using namespace cimg_library;
 
 int main()
 {
-  CImg<double> image("../ressources/lenalow.jpg");
+  CImg<double> image("../resources/lenalow.jpg");
   std::cout << "ok1" << std::endl;
 	CImg<double> zlena(z_transform(image));
 

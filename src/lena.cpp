@@ -9,7 +9,7 @@ using namespace cimg_library;
 int main()
 {
 
-	CImg<double> image("../ressources/ruault.jpg");
+	CImg<double> image("../resources/ruault.jpg");
 	CImg<double> copy(image);
 
 	/*std::cout << copy.width() << copy.height() << copy.depth() <<  copy.spectrum() << copy.atXYZC(5,100,0,0,0) << '\n';

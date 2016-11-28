@@ -17,4 +17,5 @@ target_link_libraries(rescale "-lX11")
 target_link_libraries(rescale "-pthread")
 
 add_executable(first_test first_test.cpp)
-
+target_link_libraries(first_test "-lX11")
+target_link_libraries(first_test "-pthread")
