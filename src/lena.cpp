@@ -9,7 +9,7 @@ using namespace cimg_library;
 int main()
 {
 
-	CImg<double> image("../ressources/ruault.jpg");
+	CImg<double> image("../ressources/Nina.jpg");
 	CImg<double> copy(image);
 
 	/*std::cout << copy.width() << copy.height() << copy.depth() <<  copy.spectrum() << copy.atXYZC(5,100,0,0,0) << '\n';
@@ -17,7 +17,7 @@ int main()
 
 	for (size_t x = 0; x < copy.width(); x++) {
 		for (size_t y = 0; y < copy.height(); y++) {
-			for (size_t c = 0; c < 3; c++) {
+			for (size_t c = 0; c < 1; c++) {
 				if (copy.operator()(x,y,0,c) < 70)
 				{
 					copy.operator()(x,y,0,c) = 255-((255-70)/(70))*copy.operator()(x,y,0,c);
@@ -27,6 +27,6 @@ int main()
 
 		}
 	}
-	copy.save("ruault_solarized.jpg");
+	copy.save("Nina_red.jpg");
 	return 0;
 }
