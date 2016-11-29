@@ -20,7 +20,7 @@ int main()
 	for (size_t x = 0; x < copy.width(); x++) {
 		for (size_t y = 0; y < copy.height(); y++) {
 			for (size_t c = 0; c < 1; c++) {
-				if (copy.operator()(x,y,0,c) < 70)
+				if (copy.operator()(x,y,0	,c) < 70)
 				{
 					copy.operator()(x,y,0,c) = 255-((255-70)/(70))*copy.operator()(x,y,0,c);
 				}
