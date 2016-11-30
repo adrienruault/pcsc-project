@@ -5,6 +5,7 @@
  *      Author: adrien
  */
 
+#include <iostream>
 #include "CImg.h"
 using namespace cimg_library;
 
@@ -13,7 +14,7 @@ using namespace cimg_library;
 
 int main(int argc, char* argv[])
 {
-	CImg<unsigned char> image("../resources/lena.jpg"), visu(500,400,1,3,0);
+	CImg<unsigned char> image("len_std.jpg"), visu(500,400,1,3,0);
 	const unsigned char red[] = { 255,0,0 }, green[] = { 0,255,0 }, blue[] = { 0,0,255 };
 	image.blur(2.5);
 	CImgDisplay main_disp(image,"Click a point"), draw_disp(visu,"Intensity profile");
