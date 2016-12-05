@@ -8,16 +8,24 @@
 #ifndef SRC_IMAGEBW_HPP_
 #define SRC_IMAGEBW_HPP_
 
-#include "Image.hpp";
-#include "PixelBW.hpp";
+#include <iostream>
+#include <vector>
+
+#include "Image.hpp"
+#include "PixelBW.hpp"
+
+
 
 class ImageBW : public Image
 {
 private:
 	/// mPmatrix is a matrix containing the pixels of the image
-	vector<vector<PixelBW>>* mPmatrix;
+	std::vector<std::vector<PixelBW> > mPmatrix;
 public:
 	ImageBW();
+	ImageBW(const string name);
+
+	void Display() const;
 };
 
 

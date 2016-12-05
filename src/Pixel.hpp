@@ -17,32 +17,43 @@ using namespace std;
 /// It has two derived classes that are PixelBW and PixelRGB
 class Pixel
 {
-private:
+protected:
 	/// mformat can be either "undefined", "BW", or "RGB"
 	string mformat;
 
 public:
 	// Virtual overloading of [] allowing to get the intensity of a pixel
 	virtual double operator[] (const int index) const = 0;
+
+	// Declaration of two virtual functions
+	// that allow to get and change the pixel intensities
+	virtual double GetI(const int channel=1) const = 0;
+	virtual void ChangeI(const double new_intensity, const int channel=1) = 0;
+
+	/* Do we need constructors in purely abstract class?
+	// Overriding the default constructor
+	Pixel()
+	{
+		mformat="undefined";
+	}
+	*/
+	/*
+	// Overriding the copy constructor
+	Pixel(const Pixel& copiedPixel)
+	{
+		mformat=copiedPixel.mformat;
+	}
+	*/
+
+	// Virtual deconstructor needed for purely abstract class
+	virtual ~Pixel() {}
 };
 
 
 
 
 
-/* Actually no constructor required since it is a purely abstract class
-/// Overriding the default constructor
-Pixel::Pixel()
-{
-	mformat="undefined";
-}
 
-/// Overriding the copy constructor
-Pixel::Pixel(const Pixel& copiedPixel)
-{
-	mformat=copiedPixel.mformat;
-}
-*/
 
 
 

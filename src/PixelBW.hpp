@@ -17,14 +17,20 @@
 // able to control the type used.
 class PixelBW: public Pixel
 {
-private:
+protected:
 	double mintensity;
 
 public:
 	PixelBW();
 	PixelBW(const PixelBW& copiedPixel);
+	/// Construct Black and White Pixel with specified intensity
+	PixelBW(const double intensity);
 
 	double operator[] (const int index) const;
+
+	// Declaration of two functions that allow to get and change the pixel intensities
+	double GetI(const int channel=1) const;
+	void ChangeI(const double new_intensity, const int channel=1);
 };
 
 

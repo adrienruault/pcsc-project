@@ -10,35 +10,30 @@
 
 #include <iostream>
 
-using namespace std;
-
+/// Declaring the base class that contains the information related to an image.
+/// It mainly uses the Pixel class and make a matrix of it.
+/// It has two derived classes that are ImageBW and ImageRGB.
 class Image
 {
-private:
+protected:
 	/// mformat can be either "undefined", "BW", or "RGB"
-	string mformat;
-	string mname;
+	std::string mformat;
+	std::string mname;
 
 	/// Image dimensions
 	int mwidth;
 	int mheight;
 
+
 public:
 	Image();
+
+	// Virtual destructor needed for purely abstract class
+	virtual ~Image() {};
+
+	// Is the const keyword at the end of the declaration necessary?
+	// virtual void Save(const string name=mname) const=0;
+	virtual void Display() const=0;
 };
-
-
-/// Overriding the default constructor
-/// string variables are set to "undefined" and image dimensions to 0 by default
-Image::Image()
-{
-	mformat="undefined";
-	mname="undefined";
-	mwidth=0;
-	mheight=0;
-}
-
-
-
 
 #endif /* SRC_IMAGE_HPP_ */

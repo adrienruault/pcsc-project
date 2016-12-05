@@ -26,27 +26,6 @@ public:
 };
 
 
-/// Overriding the default constructor
-/// Intensity for the 3 colors are set to 0.0 by default
-PixelRGB::PixelRGB() : Pixel()
-{
-	mformat="RGB";
-
-	mRintensity=0.0;
-	mGintensity=0.0;
-	mBintensity=0.0;
-}
-
-/// Overriding the copy constructor
-PixelRGB::PixelRGB(const PixelRGB& copiedPixel) : Pixel(copiedPixel)
-{
-	mRintensity=copiedPixel.mRintensity;
-	mGintensity=copiedPixel.mGintensity;
-	mBintensity=copiedPixel.mBintensity;
-}
-
-
-
 
 
 #endif /* SRC_PIXELRGB_HPP_ */
