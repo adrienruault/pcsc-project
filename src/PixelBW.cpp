@@ -42,7 +42,7 @@ PixelBW::PixelBW(const double intensity)
 /// throws an error. Only 1 is accepted because we are in the monochromatic mode.
 double PixelBW::operator[] (int index) const
 {
-	assert(index==1);
+	assert(index==0);
 	return mintensity;
 }
 
@@ -54,7 +54,7 @@ double PixelBW::operator[] (int index) const
 double PixelBW::GetI(const int channel /*Set by default to 1*/) const
 {
 	// Verification that channel is equal to 1
-	assert(channel==1);
+	assert(channel==0);
 
 	return mintensity;
 }
@@ -67,7 +67,7 @@ double PixelBW::GetI(const int channel /*Set by default to 1*/) const
 void PixelBW::ChangeI(const double new_intensity, const int channel /*set by default to 1*/)
 {
 	// Verification that channel is equal to 1
-	assert(channel==1);
+	assert(channel==0);
 
 	mintensity=new_intensity;
 }

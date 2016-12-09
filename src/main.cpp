@@ -40,8 +40,12 @@ int main(int argc, char* argv[])
 	ImageBW img("lena.jpg");
 	img.Display();
 
+	img.Save("test_of_saver.jpg");
+
+
 	string name="len_std.jpg";
 
+	cout << img(2,3);
 
 	/*
 	// Conversion of string to char *

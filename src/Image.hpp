@@ -31,9 +31,13 @@ public:
 	// Virtual destructor needed for purely abstract class
 	virtual ~Image() {};
 
+	virtual double& operator() (const int x, const int y, const int channel=0);
+	virtual const double& operator() (const int x, const int y, const int channel=0) const;
+
 	// Is the const keyword at the end of the declaration necessary?
 	// virtual void Save(const string name=mname) const=0;
 	virtual void Display() const=0;
+	virtual void Save(const std::string save_name) const=0;
 };
 
 #endif /* SRC_IMAGE_HPP_ */

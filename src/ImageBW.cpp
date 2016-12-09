@@ -84,16 +84,33 @@ ImageBW::ImageBW(const string name)
 		mPmatrix[i].reserve(mheight);
 	}
 
+	// Initialisation of matrix with 0
+
+
+
 	// Transfer Black and White intensities of the image into the matrix
 	// Please be careful that the indexing corresponds to the IP convention
 	for (int i=0; i<mwidth; i++)
 	{
+		mPmatrix.push_back(vector<PixelBW>(mheight));
 		for (int j=0; j<mheight; j++)
 		{
 			// Segmentation fault here
 			mPmatrix[i][j].ChangeI(img(i,j));
 		}
 	}
+}
+
+
+/// Overloading of the () operator to be able to get and modify quickly the intensity
+double& ImageBW::operator() (const int x, const int y, int channel /*=0*/)
+{
+	return &mPmatrix[x][y][0];
+}
+
+const double& ImageBW::operator() (const int x, const int y, int channel /*=0*/) const
+{
+	return mPmatrix[x][y][0];
 }
 
 
@@ -110,7 +127,7 @@ void ImageBW::Display() const
 	{
 		for (int j=0; j<mheight; j++)
 		{
-			img(i,j)=mPmatrix[i][j][1];
+			img(i,j)=mPmatrix[i][j][0];
 		}
 	}
 
@@ -124,6 +141,26 @@ void ImageBW::Display() const
 }
 
 
+/// Method that saves the image with the provided name
+/// The facilities provided by the CImg library are used here
+void ImageBW::Save(const string save_name) const
+{
+	// Declare image using CImg library
+	CImg<double> img(mwidth,mheight,1,1,0);
+
+	// Transfer of the pixel value intensity
+	for (int i=0; i<mwidth; i++)
+	{
+		for (int j=0; j<mheight; j++)
+		{
+			img(i,j)=mPmatrix[i][j][1];
+		}
+	}
+
+	// Convert mname which is a string in const char*
+	const char* char_name = save_name.c_str();
+	img.save(char_name);
+}
 
 
 

@@ -29,8 +29,8 @@ public:
 	double operator[] (const int index) const;
 
 	// Declaration of two functions that allow to get and change the pixel intensities
-	double GetI(const int channel=1) const;
-	void ChangeI(const double new_intensity, const int channel=1);
+	double GetI(const int channel=0) const;
+	void ChangeI(const double new_intensity, const int channel=0);
 };
 
 
