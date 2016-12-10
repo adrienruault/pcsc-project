@@ -17,20 +17,34 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 
-
-	/* CURRENT TEST
-		ImageBW img("lena.jpg");
-		img.Display();
-
-		img.Save("test_of_saver.jpg");
-
-
-		string name="len_std.jpg";
-
-		//cout << img(2,3);
+	ImageBW img("lena.jpg");
+	/*
+	img.Display();
+	img.Save("test_of_saver.jpg");
+	string name="len_std.jpg";
 	*/
 
 
+
+	cout << img(2,2,0) << "\n";
+	cout << img(511,40,0) << "\n";
+	cout << img(2,2,0) << "\n";
+	cout << img(2,2,0) << "\n";
+	cout << img(2,2,0) << "\n";
+
+
+	ImageBW trial(512,512,"this_is_a_test.jpg");
+	for(int i=0; i<100; i++)
+	{
+		for(int j=0; j<100; j++)
+		{
+			trial(i,j,0)=255;
+		}
+	}
+
+
+	trial.Display();
+	trial.Save();
 
 
 	/*

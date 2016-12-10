@@ -22,13 +22,16 @@ private:
 	/// mPmatrix is a matrix containing the pixels of the image
 	std::vector<std::vector<PixelBW> > mPmatrix;
 public:
-	ImageBW();
+	ImageBW(const int width, const int height, const string name="undefined.jpg");
 	ImageBW(const string name);
 
-	//double& operator() (const int x, const int y);
-	//const double& operator() (const int x, const int y) const;
+
+	double& operator()(const int x, const int y, const int channel);
+	const double& operator()(const int x, const int y, const int channel) const;
+
 
 	void Display() const;
+	void Save() const;
 	void Save(const string save_name) const;
 };
 

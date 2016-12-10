@@ -42,13 +42,13 @@ PixelBW::PixelBW(const double intensity)
 /// Only channel 0 is accepted: throws an error otherwise.
 double& PixelBW::operator[] (const int channel /*=0*/)
 {
-	assert(channel==0);
+	//assert(channel==0);
 	return mintensity;
 }
 
 const double& PixelBW::operator[] (const int channel /*=0*/) const
 {
-	assert(channel==0);
+	//assert(channel==0);
 	return mintensity;
 }
 
@@ -57,7 +57,7 @@ const double& PixelBW::operator[] (const int channel /*=0*/) const
 /// The argument channel is used to indicate which color we want to modify. Here we are
 /// in the monochromatic mode so this value has to be unchanged when the function is called
 // Be careful: don't put default definition is function declaration but in prototype
-double PixelBW::GetI(const int channel /*Set by default to 1*/) const
+double PixelBW::GetI(const int channel /*Set by default to 0*/) const
 {
 	// Verification that channel is equal to 1
 	assert(channel==0);
@@ -70,7 +70,7 @@ double PixelBW::GetI(const int channel /*Set by default to 1*/) const
 /// As in the GetI method the channel variable must be let to 1
 /// because we only have one color
 // Be careful: don't put default definition is function declaration but in prototype
-void PixelBW::ChangeI(const double new_intensity, const int channel /*set by default to 1*/)
+void PixelBW::ChangeI(const double new_intensity, const int channel /*set by default to 0*/)
 {
 	// Verification that channel is equal to 1
 	assert(channel==0);
