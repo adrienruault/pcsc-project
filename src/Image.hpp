@@ -36,8 +36,9 @@ public:
 
 	int Width() const;
 	int Height() const;
+	void SetName(const std::string new_name);
 
-	// Is the const keyword at the end of the declaration necessary?
+	// Is the const keyword at the end of the declaration necessary? -> Yes
 	// virtual void Save(const string name=mname) const=0;
 	virtual void Display() const=0;
 	virtual void Save() const=0;

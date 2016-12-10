@@ -7,10 +7,11 @@
 
 #include <cassert>
 #include <iostream>
+#include <exception>
 
 #include "PixelBW.hpp"
+#include "Error.hpp"
 
-using namespace std;
 
 
 /// Overriding the default constructor
@@ -42,14 +43,26 @@ PixelBW::PixelBW(const double intensity)
 /// Only channel 0 is accepted: throws an error otherwise.
 double& PixelBW::operator[] (const int channel /*=0*/)
 {
-	//assert(channel==0);
-	return mintensity;
+	if (channel==0)
+	{
+		return mintensity;
+	}
+	else
+	{
+		throw ErrorChannel();
+	}
 }
 
 const double& PixelBW::operator[] (const int channel /*=0*/) const
 {
-	//assert(channel==0);
-	return mintensity;
+	if (channel==0)
+	{
+		return mintensity;
+	}
+	else
+	{
+		throw ErrorChannel();
+	}
 }
 
 /// Method that allows to get the intensity of a pixel.
@@ -65,6 +78,7 @@ double PixelBW::GetI(const int channel /*Set by default to 0*/) const
 	return mintensity;
 }
 
+
 /// Method that allows to change the intensity of a pixel.
 /// The argument new intensity is used to provide the new intensity.
 /// As in the GetI method the channel variable must be let to 1
@@ -77,10 +91,6 @@ void PixelBW::ChangeI(const double new_intensity, const int channel /*set by def
 
 	mintensity=new_intensity;
 }
-
-
-
-
 
 
 

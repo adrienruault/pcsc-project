@@ -1,29 +1,28 @@
 /*
- * ImageBW.hpp
+ * ImageRGB.hpp
  *
- *  Created on: Nov 30, 2016
+ *  Created on: Dec 10, 2016
  *      Author: adrien
  */
 
-#ifndef SRC_IMAGEBW_HPP_
-#define SRC_IMAGEBW_HPP_
+#ifndef SRC_IMAGERGB_HPP_
+#define SRC_IMAGERGB_HPP_
 
 #include <iostream>
 #include <vector>
 
 #include "Image.hpp"
-#include "PixelBW.hpp"
+#include "PixelRGB.hpp"
 
 
-
-class ImageBW : public Image
+class ImageRGB : Image
 {
 private:
 	/// mPmatrix is a matrix containing the pixels of the image
-	std::vector<std::vector<PixelBW> > mPmatrix;
+	std::vector<std::vector<PixelRGB> > mPmatrix;
 public:
-	ImageBW(const int width, const int height, const std::string name="undefined.jpg");
-	ImageBW(const std::string name);
+	ImageRGB(const int width, const int height, const std::string name="undefined.jpg");
+	ImageRGB(const std::string name);
 
 	double& operator()(const int x, const int y, const int channel);
 	const double& operator()(const int x, const int y, const int channel) const;
@@ -34,5 +33,4 @@ public:
 };
 
 
-
-#endif /* SRC_IMAGEBW_HPP_ */
+#endif /* SRC_IMAGERGB_HPP_ */

@@ -22,7 +22,16 @@ public:
 	PixelRGB();
 	PixelRGB(const PixelRGB& copiedPixel);
 
-	double operator[] (const int index) const;
+	/// Overloading of operator [] to get and set PixelRGB intensities
+	// For default values see: http://stackoverflow.com/questions/12139786/good-pratice-default-arguments-for-pure-virtual-method
+	double& operator[] (const int channel);
+	const double& operator[] (const int channel) const;
+
+	double GetI(const int channel=0) const
+	{return 0;}
+	void ChangeI(const double new_intensity, const int channel=0)
+	{}
+
 };
 
 

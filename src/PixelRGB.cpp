@@ -8,7 +8,8 @@
 #include <iostream>
 #include <cassert>
 
-#include "PixelRGB.hpp";
+#include "PixelRGB.hpp"
+#include "Error.hpp"
 
 
 
@@ -31,27 +32,49 @@ PixelRGB::PixelRGB(const PixelRGB& copiedPixel) : Pixel(copiedPixel)
 	mBintensity=copiedPixel.mBintensity;
 }
 
-/// Overloading the [] operator
-/// Potential arguments with their returns: 1 -> Red intensity
-///											2 -> Green intensity
-/// 										3 -> Blue intensity
-double PixelRGB::operator [](int index) const
+/// Overloading of the [] operator to set and get PixelRGB intensities
+/// Potential arguments with their returns: 0 -> Red intensity
+///											1 -> Green intensity
+/// 										2 -> Blue intensity
+double& PixelRGB::operator[](const int channel)
 {
-	if (index==1)
+	if (channel==0)
 	{
 		return mRintensity;
 	}
-	else if (index==2)
+	else if (channel==1)
 	{
 		return mGintensity;
 	}
-	else if (index==3)
+	else if (channel==2)
 	{
 		return mBintensity;
 	}
 	/// Throw an error if index is neither 1, 2 or 3
-	assert(0);
-	return 0;
+	else
+	{
+		throw ErrorChannel();
+	}
+}
+
+const double& PixelRGB::operator[](const int channel) const
+{
+	if (channel==0)
+	{
+		return mRintensity;
+	}
+	else if (channel==1)
+	{
+		return mGintensity;
+	}
+	else if (channel==2)
+	{
+		return mBintensity;
+	}
+	else
+	{
+		throw ErrorChannel();
+	}
 }
 
 

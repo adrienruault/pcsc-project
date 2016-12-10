@@ -1,35 +1,30 @@
 /*
- * ImageBW.cpp
+ * ImageRGB.cpp
  *
- *  Created on: Nov 30, 2016
+ *  Created on: Dec 10, 2016
  *      Author: adrien
  */
 
-#include <iostream>
 #include <vector>
-#include <cassert>
 
 #include "CImg.h"
-#include "ImageBW.hpp"
+#include "ImageRGB.hpp"
 #include "Error.hpp"
-//#include "PixelBW.hpp"
-
-
 
 using namespace cimg_library;
 
-/// Constructs a black image of dimension width x height pixels
-ImageBW::ImageBW(const int width, const int height, const std::string name/*="undefined.jpg"*/)
-//	: Image::Image()
+/// Constructor that creates a black image with provided dimensions and name
+ImageRGB::ImageRGB(const int width, const int height, const std::string name /*="undefined.jpg"*/)
 {
-	mformat="BW";
+	// Image format defined to Red Green Blue
+	mformat="RGB";
+
 	mname=name;
 
 	// Definition of dimensions attributes (initialized to 100 pixels by default)
 	mwidth=width;
 	mheight=height;
 
-	// Is what is below correct to reserve height x width memory for a vector of vector ?
 	// Image dimension:
 	mPmatrix.reserve(mwidth);
 	for (int i=0; i<mwidth; i++)
@@ -40,33 +35,41 @@ ImageBW::ImageBW(const int width, const int height, const std::string name/*="un
 
 	for (int i=0; i<mwidth; i++)
 	{
-		mPmatrix.push_back(std::vector<PixelBW>(mheight));
+		mPmatrix.push_back(std::vector<PixelRGB>(mheight));
 		for (int j=0; j<mheight; j++)
 		{
-			mPmatrix[i][j].ChangeI(0.0);
+			// Set three channels to 0 intensity
+			mPmatrix[i][j][0]=0;
+			mPmatrix[i][j][1]=0;
+			mPmatrix[i][j][2]=0;
 		}
 	}
 }
 
 
-/// Constructor that builds an Image object based on a JPEG file
-ImageBW::ImageBW(const std::string name)
+/// Constructor that builds an ImageRGB based on a JPEG file
+ImageRGB::ImageRGB(const std::string name)
 {
 	// In the future: try to implement a control on the string name
 	// to verify that it is a JPG file
 
-	mformat="BW";
+	mformat="RGB";
 	mname=name;
+
 
 	// Convert name which is a string into a const char* to pass it in CImg
 	const char* char_name = name.c_str();
 	CImg<double> img(char_name);
 
-	// Check that spectrum is of size 1 which means that the image is Black and White
-	assert(img.spectrum()==1);
+	// Check that spectrum is of size 3 which means that the image is RGB
+	if (img.spectrum()!=3)
+	{
+		throw ErrorFormat(mformat);
+	}
+
 
 	// Check that the image is effectively 2D which means its depth is 1
-	assert(img.depth()==1);
+	//assert(img.depth()==1);
 
 	// Get the dimensions of the image
 	mwidth=img.width();
@@ -83,17 +86,19 @@ ImageBW::ImageBW(const std::string name)
 	// Please be careful that the indexing corresponds to the IP convention
 	for (int i=0; i<mwidth; i++)
 	{
-		mPmatrix.push_back(std::vector<PixelBW>(mheight));
+		mPmatrix.push_back(std::vector<PixelRGB>(mheight));
 		for (int j=0; j<mheight; j++)
 		{
-			mPmatrix[i][j].ChangeI(img(i,j));
+			mPmatrix[i][j][0]=img(i,j,0,0);
+			mPmatrix[i][j][1]=img(i,j,0,1);
+			mPmatrix[i][j][2]=img(i,j,0,2);
 		}
 	}
 }
 
 
 /// Overloading of the () operator to be able to get and modify quickly the intensity
-double& ImageBW::operator()(const int x, const int y, const int channel)
+double& ImageRGB::operator()(const int x, const int y, const int channel)
 {
 	if ((0<=x and x<mwidth) and (0<=y and y<mheight))
 	{
@@ -106,7 +111,7 @@ double& ImageBW::operator()(const int x, const int y, const int channel)
 
 }
 
-const double& ImageBW::operator()(const int x, const int y, const int channel) const
+const double& ImageRGB::operator()(const int x, const int y, const int channel) const
 {
 	if ((0<=x and x<mwidth) and (0<=y and y<mheight))
 	{
@@ -117,24 +122,24 @@ const double& ImageBW::operator()(const int x, const int y, const int channel) c
 		throw ErrorDimensions(x,y);
 	}
 }
-
-
 
 
 /// Method that displays an image to the screen.
 /// The idea is to convert our Pixel matrix in the format of the CImg library to be able
 /// to use its facilities to display the image to the screen
-void ImageBW::Display() const
+void ImageRGB::Display() const
 {
 	// Declare image using CImg library
-	CImg<double> img(mwidth,mheight,1,1,0);
+	CImg<double> img(mwidth,mheight,1,3,0);
 
 	// Transfer of the pixel value intensity
 	for (int i=0; i<mwidth; i++)
 	{
 		for (int j=0; j<mheight; j++)
 		{
-			img(i,j)=mPmatrix[i][j][0];
+			img(i,j,0,0)=mPmatrix[i][j][0];
+			img(i,j,0,1)=mPmatrix[i][j][1];
+			img(i,j,0,2)=mPmatrix[i][j][2];
 		}
 	}
 
@@ -150,17 +155,19 @@ void ImageBW::Display() const
 
 /// Method that saves the image with the provided name
 /// The facilities provided by the CImg library are used here
-void ImageBW::Save() const
+void ImageRGB::Save() const
 {
 	// Declare image using CImg library
-	CImg<double> img(mwidth,mheight,1,1,0);
+	CImg<double> img(mwidth,mheight,1,3,0);
 
 	// Transfer of the pixel value intensity
 	for (int i=0; i<mwidth; i++)
 	{
 		for (int j=0; j<mheight; j++)
 		{
-			img(i,j)=mPmatrix[i][j][0];
+			img(i,j,0,0)=mPmatrix[i][j][0];
+			img(i,j,0,1)=mPmatrix[i][j][1];
+			img(i,j,0,2)=mPmatrix[i][j][2];
 		}
 	}
 	// Convert mname which is a string in const char*
@@ -169,7 +176,7 @@ void ImageBW::Save() const
 }
 
 
-void ImageBW::Save(const std::string save_name) const
+void ImageRGB::Save(const std::string save_name) const
 {
 	// Declare image using CImg library
 	CImg<double> img(mwidth,mheight,1,1,0);
@@ -179,7 +186,9 @@ void ImageBW::Save(const std::string save_name) const
 	{
 		for (int j=0; j<mheight; j++)
 		{
-			img(i,j)=mPmatrix[i][j][0];
+			img(i,j,0,0)=mPmatrix[i][j][0];
+			img(i,j,0,1)=mPmatrix[i][j][1];
+			img(i,j,0,2)=mPmatrix[i][j][2];
 		}
 	}
 
@@ -187,9 +196,5 @@ void ImageBW::Save(const std::string save_name) const
 	const char* char_name = save_name.c_str();
 	img.save(char_name);
 }
-
-
-
-
 
 

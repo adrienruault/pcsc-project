@@ -10,8 +10,6 @@
 
 #include <iostream>
 
-using namespace std;
-
 
 /// Declaring the base class that contains the information related to a single pixel
 /// It has two derived classes that are PixelBW and PixelRGB
@@ -19,7 +17,7 @@ class Pixel
 {
 protected:
 	/// mformat can be either "undefined", "BW", or "RGB"
-	string mformat;
+	std::string mformat;
 
 public:
 	// Virtual overloading of [] allowing to set and get the intensity of a pixel
@@ -29,8 +27,8 @@ public:
 
 	// Declaration of two virtual functions
 	// that allow to get and change the pixel intensities
-	virtual double GetI(const int channel=1) const = 0;
-	virtual void ChangeI(const double new_intensity, const int channel=1) = 0;
+	virtual double GetI(const int channel=0) const = 0;
+	virtual void ChangeI(const double new_intensity, const int channel=0) = 0;
 
 	/* Do we need constructors in purely abstract class?
 	// Overriding the default constructor
