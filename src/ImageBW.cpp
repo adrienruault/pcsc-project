@@ -101,18 +101,19 @@ ImageBW::ImageBW(const string name)
 	}
 }
 
-
+/*
 /// Overloading of the () operator to be able to get and modify quickly the intensity
-double& ImageBW::operator() (const int x, const int y, int channel /*=0*/)
+double& ImageBW::operator() (const int x, const int y, int channel /*=0*/ /*)
 {
-	return &mPmatrix[x][y][0];
+	return mPmatrix[x][y];
 }
 
-const double& ImageBW::operator() (const int x, const int y, int channel /*=0*/) const
+const double& ImageBW::operator() (const int x, const int y, int channel /*=0*/ /*) const
 {
-	return mPmatrix[x][y][0];
+	return mPmatrix[x][y];
 }
 
+*/
 
 /// Method that displays an image to the screen.
 /// The idea is to convert our Pixel matrix in the format of the CImg library to be able

@@ -22,8 +22,10 @@ protected:
 	string mformat;
 
 public:
-	// Virtual overloading of [] allowing to get the intensity of a pixel
-	virtual double operator[] (const int index) const = 0;
+	// Virtual overloading of [] allowing to set and get the intensity of a pixel
+	// Some care has to be taken when defining default values for purely virtual methods
+	virtual double& operator[] (const int channel) = 0;
+	virtual const double& operator[] (const int channel) const=0;
 
 	// Declaration of two virtual functions
 	// that allow to get and change the pixel intensities

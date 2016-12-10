@@ -31,8 +31,8 @@ public:
 	// Virtual destructor needed for purely abstract class
 	virtual ~Image() {};
 
-	virtual double& operator() (const int x, const int y, const int channel=0);
-	virtual const double& operator() (const int x, const int y, const int channel=0) const;
+	//virtual double& operator() (const int x, const int y)=0;
+	//virtual const double& operator() (const int x, const int y) const=0;
 
 	// Is the const keyword at the end of the declaration necessary?
 	// virtual void Save(const string name=mname) const=0;

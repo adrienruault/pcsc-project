@@ -16,6 +16,23 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
+
+
+	/* CURRENT TEST
+		ImageBW img("lena.jpg");
+		img.Display();
+
+		img.Save("test_of_saver.jpg");
+
+
+		string name="len_std.jpg";
+
+		//cout << img(2,3);
+	*/
+
+
+
+
 	/*
 	PixelBW a(10.0);
 	a.ChangeI(20.0);
@@ -37,15 +54,10 @@ int main(int argc, char* argv[])
 	*/
 
 
-	ImageBW img("lena.jpg");
-	img.Display();
-
-	img.Save("test_of_saver.jpg");
 
 
-	string name="len_std.jpg";
 
-	cout << img(2,3);
+
 
 	/*
 	// Conversion of string to char *

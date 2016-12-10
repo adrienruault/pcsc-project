@@ -25,8 +25,8 @@ public:
 	ImageBW();
 	ImageBW(const string name);
 
-	double& operator() (const int x, const int y, const int channel=0);
-	const double& operator() (const int x, const int y, const int channel=0) const;
+	//double& operator() (const int x, const int y);
+	//const double& operator() (const int x, const int y) const;
 
 	void Display() const;
 	void Save(const string save_name) const;

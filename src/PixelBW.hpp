@@ -17,7 +17,7 @@
 // able to control the type used.
 class PixelBW: public Pixel
 {
-protected:
+private:
 	double mintensity;
 
 public:
@@ -26,7 +26,10 @@ public:
 	/// Construct Black and White Pixel with specified intensity
 	PixelBW(const double intensity);
 
-	double operator[] (const int index) const;
+	/// Overloading of operator [] to get and set PixelBW intensity
+	// For default values see: http://stackoverflow.com/questions/12139786/good-pratice-default-arguments-for-pure-virtual-method
+	double& operator[] (const int channel);
+	const double& operator[] (const int channel) const;
 
 	// Declaration of two functions that allow to get and change the pixel intensities
 	double GetI(const int channel=0) const;

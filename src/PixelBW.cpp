@@ -37,12 +37,18 @@ PixelBW::PixelBW(const double intensity)
 	mintensity=intensity;
 }
 
-/// Overloading of the [] operator
-/// If 1 is used as argument the intensity of the pixel is returned, otherwise it
-/// throws an error. Only 1 is accepted because we are in the monochromatic mode.
-double PixelBW::operator[] (int index) const
+/// Overloading of the [] operator to get and set intensity
+/// channel is set to 0 by default which is suitable for monochromatic Pixel.
+/// Only channel 0 is accepted: throws an error otherwise.
+double& PixelBW::operator[] (const int channel /*=0*/)
 {
-	assert(index==0);
+	assert(channel==0);
+	return mintensity;
+}
+
+const double& PixelBW::operator[] (const int channel /*=0*/) const
+{
+	assert(channel==0);
 	return mintensity;
 }
 

@@ -7,6 +7,10 @@ PixelBW.hpp PixelBW.cpp)
 target_link_libraries(main "-lX11")
 target_link_libraries(main "-pthread")
 
+add_executable(pixel_bracket_test pixel_bracket_test.cpp PixelBW.hpp PixelBW.cpp)
+target_link_libraries(main "-lX11")
+target_link_libraries(main "-pthread")
+
 
 #add_executable(main main.cpp)
 #target_link_libraries(main "-lX11")
