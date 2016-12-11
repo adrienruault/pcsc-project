@@ -21,7 +21,7 @@ int Image::Height() const
 }
 
 /// Method that changes the name of Image
-void Image::SetName(const std::string new_name)
+void Image::SetName(const std::string& new_name)
 {
 	mname=new_name;
 }

@@ -56,7 +56,7 @@ public:
 
 		mphrase="ERROR: Pixel with index: (" + x_coor + "," + y_coor + ") is out of bounds\n";
 		*/
-		mphrase="ERROR: trying to reach a Pixel which is out of bound";
+		mphrase="ERROR: trying to reach a Pixel which is out of bound\n";
 	}
 
 	virtual const char* what() const throw()

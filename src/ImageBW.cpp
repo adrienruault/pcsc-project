@@ -19,7 +19,7 @@
 using namespace cimg_library;
 
 /// Constructs a black image of dimension width x height pixels
-ImageBW::ImageBW(const int width, const int height, const std::string name/*="undefined.jpg"*/)
+ImageBW::ImageBW(const int& width, const int& height, const double& intensity, const std::string& name/*="undefined.jpg"*/)
 //	: Image::Image()
 {
 	mformat="BW";
@@ -43,14 +43,35 @@ ImageBW::ImageBW(const int width, const int height, const std::string name/*="un
 		mPmatrix.push_back(std::vector<PixelBW>(mheight));
 		for (int j=0; j<mheight; j++)
 		{
-			mPmatrix[i][j].ChangeI(0.0);
+			mPmatrix[i][j][0]=intensity;
 		}
 	}
+
+	// Computing the vector of distribution
+	// Initialisation at 0
+	mdistribution.reserve(257);
+	for(int i=0; i<257; i++)
+	{
+		mdistribution.push_back(0);
+	}
+
+	// Filling of mdistribution
+	for(int i=0; i<mwidth; i++)
+	{
+		for(int j=0; j<mheight; j++)
+		{
+			int k=mPmatrix[i][j][0];
+			mdistribution[k]+=1;
+		}
+	}
+
+	// Last element signals that mdistribution is up-to-date
+	mdistribution[256]=1;
 }
 
 
 /// Constructor that builds an Image object based on a JPEG file
-ImageBW::ImageBW(const std::string name)
+ImageBW::ImageBW(const std::string& name)
 {
 	// In the future: try to implement a control on the string name
 	// to verify that it is a JPG file
@@ -62,8 +83,11 @@ ImageBW::ImageBW(const std::string name)
 	const char* char_name = name.c_str();
 	CImg<double> img(char_name);
 
-	// Check that spectrum is of size 1 which means that the image is Black and White
-	assert(img.spectrum()==1);
+	// Check that spectrum is of size 3 which means that the image is RGB
+	if (img.spectrum()!=1)
+	{
+		throw ErrorFormat(mformat);
+	}
 
 	// Check that the image is effectively 2D which means its depth is 1
 	assert(img.depth()==1);
@@ -86,17 +110,40 @@ ImageBW::ImageBW(const std::string name)
 		mPmatrix.push_back(std::vector<PixelBW>(mheight));
 		for (int j=0; j<mheight; j++)
 		{
-			mPmatrix[i][j].ChangeI(img(i,j));
+			mPmatrix[i][j][0]=img(i,j);
 		}
 	}
+
+	// Computing the vector of distribution
+	// Initialisation at 0
+	mdistribution.reserve(257);
+	for(int i=0; i<257; i++)
+	{
+		mdistribution.push_back(0);
+	}
+
+	// Filling of mdistribution
+	for(int i=0; i<mwidth; i++)
+	{
+		for(int j=0; j<mheight; j++)
+		{
+			int k=mPmatrix[i][j][0];
+			mdistribution[k]+=1;
+		}
+	}
+
+	// Last element signals that mdistribution is up-to-date
+	mdistribution[256]=1;
 }
 
 
 /// Overloading of the () operator to be able to get and modify quickly the intensity
-double& ImageBW::operator()(const int x, const int y, const int channel)
+double& ImageBW::operator()(const int& x, const int& y, const int& channel)
 {
 	if ((0<=x and x<mwidth) and (0<=y and y<mheight))
 	{
+		// Last element signals that mdistribution is out-dated
+		mdistribution[256]=0;
 		return mPmatrix[x][y][channel];
 	}
 	else
@@ -106,7 +153,7 @@ double& ImageBW::operator()(const int x, const int y, const int channel)
 
 }
 
-const double& ImageBW::operator()(const int x, const int y, const int channel) const
+const double& ImageBW::operator()(const int& x, const int& y, const int& channel) const
 {
 	if ((0<=x and x<mwidth) and (0<=y and y<mheight))
 	{
@@ -118,6 +165,49 @@ const double& ImageBW::operator()(const int x, const int y, const int channel) c
 	}
 }
 
+
+/// Method that updates mdistribution
+void ImageBW::UpdateDistribution()
+{
+	// Resetting mdistribution to 0
+	for(int i=0; i<256; i++)
+	{
+		mdistribution[i]=0;
+	}
+
+	// Filling of mdistribution
+	for(int i=0; i<mwidth; i++)
+	{
+		for(int j=0; j<mheight; j++)
+		{
+			int k=mPmatrix[i][j][0];
+			mdistribution[k]+=1;
+		}
+	}
+
+	// Last element signals that mdistribution is up-to-date:
+	mdistribution[256]=1;
+}
+
+
+/// Method that returns the greater number of pixel with identical intensity
+int ImageBW::MostPopI()
+{
+	if (mdistribution[256]==0)
+	{
+		ImageBW::UpdateDistribution();
+	}
+
+	int max=0;
+	for(int i=0; i<256; i++)
+	{
+		if (mdistribution[i] > max)
+		{
+			max=mdistribution[i];
+		}
+	}
+	return max;
+}
 
 
 
@@ -169,7 +259,8 @@ void ImageBW::Save() const
 }
 
 
-void ImageBW::Save(const std::string save_name) const
+/// Method that saves an image with the name provided in argument
+void ImageBW::Save(const std::string& save_name) const
 {
 	// Declare image using CImg library
 	CImg<double> img(mwidth,mheight,1,1,0);
@@ -189,7 +280,45 @@ void ImageBW::Save(const std::string save_name) const
 }
 
 
+/// Method that sets the intensity of every pixel of the image to the intensity
+/// provided in argument
+void ImageBW::SetI(const double& new_intensity)
+{
+	for(int i=0; i<mwidth; i++)
+	{
+		for(int j=0; j<mheight; j++)
+		{
+			mPmatrix[i][j][0]=new_intensity;
+		}
+	}
+	// Last element signals that mdistribution is out-dated
+	mdistribution[256]=0;
+}
 
+/// Method that creates an histogram that shows the distribution of pixel intensities
+/// The ImageBW instance histo provided as argument must match one requirement:
+/// 	-> It must have a width of 512 pixels
+void ImageBW::Histogram(Image& histo, const std::string& histo_name)
+{
+	int height=histo.Height();
+	histo.SetI(255);
 
+	double ratio=0.75*(double)height/(double)ImageBW::MostPopI();
+	int nb_pixel;
+	int x;
+	for(int i=0; i<255; i++)
+	{
+		nb_pixel=(int)((double)mdistribution[i]*ratio);
+		for (int k=0; k<nb_pixel; k++)
+		{
+			//std::cout << i << "\t" << k << "\n";
+			x=2*i;
+			histo(x,height-1-k,0)=0;
+			histo(x+1,height-1-k,0)=0;
+		}
+	}
 
+	histo.Display();
+	histo.Save(histo_name);
+}
 

@@ -20,18 +20,18 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
+
 	try
 	{
-		ImageRGB img("lena.jpg");
-		img.Display();
+		ImageBW img("lena.jpg");
+		ImageBW histo(512,256,255,"lenahisto.jpg");
+		//img.Display();
+		img.Histogram(histo,"lenaHisto.jpg");
 	}
 	catch(std::exception const& e)
 	{
 		cerr << e.what();
 	}
-
-
-
 
 
 

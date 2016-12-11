@@ -21,15 +21,17 @@ private:
 	/// mPmatrix is a matrix containing the pixels of the image
 	std::vector<std::vector<PixelRGB> > mPmatrix;
 public:
-	ImageRGB(const int width, const int height, const std::string name="undefined.jpg");
-	ImageRGB(const std::string name);
+	ImageRGB(const int& width, const int& height, const std::string& name="undefined.jpg");
+	ImageRGB(const std::string& name);
 
-	double& operator()(const int x, const int y, const int channel);
-	const double& operator()(const int x, const int y, const int channel) const;
+	double& operator()(const int& x, const int& y, const int& channel);
+	const double& operator()(const int& x, const int& y, const int& channel) const;
 
 	void Display() const;
 	void Save() const;
-	void Save(const std::string save_name) const;
+	void Save(const std::string& save_name) const;
+	void SetI(const double& new_intensity) {}
+	void Histogram(const std::string& histo_name) const {}
 };
 
 

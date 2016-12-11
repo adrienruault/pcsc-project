@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
 	}
 
 	{
-	ImageBW c(100,100);
+	ImageBW c(100,100,0);
 	double b;
 	double d;
 
