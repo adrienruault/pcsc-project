@@ -6,7 +6,8 @@
  */
 
 #include <iostream>
-#include <iostream>
+#include <vector>
+#include <typeinfo>
 
 //#include "Image.hpp"
 #include "CImg.h"
@@ -24,6 +25,9 @@ int main(int argc, char* argv[])
 	try
 	{
 		ImageBW img("lena.jpg");
+		cout << img(2,7) << "\n" << img(2,7,0) << "\n";
+		img(2,7,1);
+
 		ImageBW histo(512,256,255,"lenahisto.jpg");
 		//img.Display();
 		img.Histogram(histo);
@@ -38,6 +42,7 @@ int main(int argc, char* argv[])
 	try
 	{
 		ImageRGB color("len_std.jpg");
+		color(2,2,4);
 		color.Display();
 	}
 	catch(std::exception const& e)
@@ -45,6 +50,12 @@ int main(int argc, char* argv[])
 		cerr << e.what();
 	}
 
+	vector<int> vec;
+
+	vector<PixelBW> lourd;
+
+	cout << (typeid(int)==typeid(vec[0])) << "\n";
+	cout << (typeid(PixelBW)==typeid(int)) << "\n";
 
 
 	/*

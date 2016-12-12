@@ -191,7 +191,7 @@ void ImageBW::UpdateDistribution()
 
 
 /// Method that returns the greater number of pixel with identical intensity
-int ImageBW::MostPopI()
+int ImageBW::MostPopI(const int& channel)
 {
 	if (mdistribution[256]==0)
 	{

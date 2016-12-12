@@ -27,6 +27,7 @@ public:
 	double& operator()(const int& x, const int& y, const int& channel=0);
 	const double& operator()(const int& x, const int& y, const int& channel=0) const;
 
+	int MostPopI(const int& channel=0) {return 0;}
 	double MaxI(const int& channel=0) const {return 0;}
 	double MinI(const int& channel=0) const {return 0;}
 	void Display() const;

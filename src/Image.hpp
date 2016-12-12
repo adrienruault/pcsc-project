@@ -41,6 +41,7 @@ public:
 
 	// Is the const keyword at the end of the declaration necessary? -> Yes
 	// virtual void Save(const string name=mname) const=0;
+	virtual int MostPopI(const int& channel=0)=0;
 	virtual double MaxI(const int& channel=0) const=0;
 	virtual double MinI(const int& channel=0) const=0;
 	virtual void Display() const=0;

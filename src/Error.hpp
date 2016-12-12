@@ -28,7 +28,7 @@ public:
 		}
 		else
 		{
-			mphrase="ERROR: the channel index is not 0,1 or2 for ImageRGB\n";
+			mphrase="ERROR: the channel index is not 0, 1 or 2 for ImageRGB\n";
 		}
 	}
 

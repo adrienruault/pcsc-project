@@ -32,7 +32,7 @@ public:
 	const double& operator()(const int& x, const int& y, const int& channel=0) const;
 
 	void UpdateDistribution();
-	int MostPopI();
+	int MostPopI(const int& channel=0);
 	double MaxI(const int& channel=0) const;
 	double MinI(const int& channel=0) const;
 	void Display() const;
