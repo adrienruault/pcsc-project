@@ -26,7 +26,19 @@ int main(int argc, char* argv[])
 		ImageBW img("lena.jpg");
 		ImageBW histo(512,256,255,"lenahisto.jpg");
 		//img.Display();
-		img.Histogram(histo,"lenaHisto.jpg");
+		img.Histogram(histo);
+		cout << img.MaxI() << "\n";
+		cout << img.MinI() << "\n";
+	}
+	catch(std::exception const& e)
+	{
+		cerr << e.what();
+	}
+
+	try
+	{
+		ImageRGB color("len_std.jpg");
+		color.Display();
 	}
 	catch(std::exception const& e)
 	{

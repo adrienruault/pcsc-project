@@ -138,7 +138,7 @@ ImageBW::ImageBW(const std::string& name)
 
 
 /// Overloading of the () operator to be able to get and modify quickly the intensity
-double& ImageBW::operator()(const int& x, const int& y, const int& channel)
+double& ImageBW::operator()(const int& x, const int& y, const int& channel /*=0*/)
 {
 	if ((0<=x and x<mwidth) and (0<=y and y<mheight))
 	{
@@ -153,7 +153,7 @@ double& ImageBW::operator()(const int& x, const int& y, const int& channel)
 
 }
 
-const double& ImageBW::operator()(const int& x, const int& y, const int& channel) const
+const double& ImageBW::operator()(const int& x, const int& y, const int& channel /*=0*/) const
 {
 	if ((0<=x and x<mwidth) and (0<=y and y<mheight))
 	{
@@ -207,6 +207,54 @@ int ImageBW::MostPopI()
 		}
 	}
 	return max;
+}
+
+
+/// Method that returns the maximum intensity
+double ImageBW::MaxI(const int& channel /*=0*/) const
+{
+	if (channel!=0)
+	{
+		throw ErrorChannel(mformat);
+	}
+
+	// Initialize max value with the intensity of the top-left corner
+	double max=mPmatrix[0][0][0];
+	for(int i=0; i<mwidth; i++)
+	{
+		for(int j=0; j<mheight; j++)
+		{
+			if (mPmatrix[i][j][0] > max)
+			{
+				max=mPmatrix[i][j][0];
+			}
+		}
+	}
+	return max;
+}
+
+
+/// Method that returns the minimum intensity
+double ImageBW::MinI(const int& channel /*=0*/) const
+{
+	if (channel!=0)
+	{
+		throw ErrorChannel(mformat);
+	}
+
+	// Initialize max value with the intensity of the top-left corner
+	double min=mPmatrix[0][0][0];
+	for(int i=0; i<mwidth; i++)
+	{
+		for(int j=0; j<mheight; j++)
+		{
+			if (mPmatrix[i][j][0] < min)
+			{
+				min=mPmatrix[i][j][0];
+			}
+		}
+	}
+	return min;
 }
 
 
@@ -298,7 +346,7 @@ void ImageBW::SetI(const double& new_intensity)
 /// Method that creates an histogram that shows the distribution of pixel intensities
 /// The ImageBW instance histo provided as argument must match one requirement:
 /// 	-> It must have a width of 512 pixels
-void ImageBW::Histogram(Image& histo, const std::string& histo_name)
+void ImageBW::Histogram(Image& histo, const std::string& provided_name /*="undefined"*/)
 {
 	int height=histo.Height();
 	histo.SetI(255);
@@ -318,7 +366,18 @@ void ImageBW::Histogram(Image& histo, const std::string& histo_name)
 		}
 	}
 
+	std::string save_histo;
+	// Set the name to histo name attribute if no name is provided as argument
+	if (provided_name=="undefined")
+	{
+		save_histo=histo.GetName();
+	}
+	else
+	{
+		save_histo=provided_name;
+	}
+
 	histo.Display();
-	histo.Save(histo_name);
+	histo.Save(save_histo);
 }
 

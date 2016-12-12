@@ -98,7 +98,7 @@ ImageRGB::ImageRGB(const std::string& name)
 
 
 /// Overloading of the () operator to be able to get and modify quickly the intensity
-double& ImageRGB::operator()(const int& x, const int& y, const int& channel)
+double& ImageRGB::operator()(const int& x, const int& y, const int& channel /*=0*/)
 {
 	if ((0<=x and x<mwidth) and (0<=y and y<mheight))
 	{
@@ -111,7 +111,7 @@ double& ImageRGB::operator()(const int& x, const int& y, const int& channel)
 
 }
 
-const double& ImageRGB::operator()(const int& x, const int& y, const int& channel) const
+const double& ImageRGB::operator()(const int& x, const int& y, const int& channel /*=0*/) const
 {
 	if ((0<=x and x<mwidth) and (0<=y and y<mheight))
 	{

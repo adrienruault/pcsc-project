@@ -43,26 +43,21 @@ PixelBW::PixelBW(const double intensity)
 /// Only channel 0 is accepted: throws an error otherwise.
 double& PixelBW::operator[] (const int channel /*=0*/)
 {
-	if (channel==0)
+	if (channel!=0)
 	{
-		return mintensity;
+		throw ErrorChannel(mformat);
 	}
-	else
-	{
-		throw ErrorChannel();
-	}
+	return mintensity;
 }
 
 const double& PixelBW::operator[] (const int channel /*=0*/) const
 {
-	if (channel==0)
+	if (channel!=0)
 	{
-		return mintensity;
+		throw ErrorChannel(mformat);
+
 	}
-	else
-	{
-		throw ErrorChannel();
-	}
+	return mintensity;
 }
 
 /// Method that allows to get the intensity of a pixel.

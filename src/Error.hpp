@@ -20,9 +20,16 @@ class ErrorChannel : public std::exception
 private:
 	std::string mphrase;
 public:
-	ErrorChannel() throw()
+	ErrorChannel(const std::string& format) throw()
 	{
-		mphrase="ERROR: the channel index is not allowed\n";
+		if (format=="BW")
+		{
+			mphrase="ERROR: the channel index is not 0 for ImageBW\n";
+		}
+		else
+		{
+			mphrase="ERROR: the channel index is not 0,1 or2 for ImageRGB\n";
+		}
 	}
 
 	virtual const char* what() const throw()

@@ -53,7 +53,7 @@ double& PixelRGB::operator[](const int channel)
 	/// Throw an error if index is neither 1, 2 or 3
 	else
 	{
-		throw ErrorChannel();
+		throw ErrorChannel(mformat);
 	}
 }
 
@@ -73,7 +73,7 @@ const double& PixelRGB::operator[](const int channel) const
 	}
 	else
 	{
-		throw ErrorChannel();
+		throw ErrorChannel(mformat);
 	}
 }
 

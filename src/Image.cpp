@@ -25,3 +25,8 @@ void Image::SetName(const std::string& new_name)
 {
 	mname=new_name;
 }
+
+std::string Image::GetName() const
+{
+	return mname;
+}
