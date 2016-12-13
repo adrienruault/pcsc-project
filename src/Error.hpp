@@ -14,21 +14,59 @@
 #include <string>
 
 
+class ErrorPixelType : public std::exception
+{
+private:
+	std::string mphrase;
+public:
+	ErrorPixelType() throw()
+	{
+		mphrase="ERROR: wrong Pixel type for Image template, try PixelBW or PixelRGB\n";
+	}
+
+	virtual const char* what() const throw()
+	{
+		return mphrase.c_str();
+	}
+	virtual ~ErrorPixelType() throw()
+	{}
+};
+
+
+class Error3DImage : public std::exception
+{
+private:
+	std::string mphrase;
+public:
+	Error3DImage() throw()
+	{
+		mphrase="ERROR: trying to open 3D image which is not allowed\n";
+	}
+
+	virtual const char* what() const throw()
+	{
+		return mphrase.c_str();
+	}
+	virtual ~Error3DImage() throw()
+	{}
+};
+
+
 /// Defining exception class to handle a channel error in PixelBW and PixelRGB
 class ErrorChannel : public std::exception
 {
 private:
 	std::string mphrase;
 public:
-	ErrorChannel(const std::string& format) throw()
+	ErrorChannel(const int& spectra) throw()
 	{
-		if (format=="BW")
+		if (spectra==1)
 		{
-			mphrase="ERROR: the channel index is not 0 for ImageBW\n";
+			mphrase="ERROR: the channel index is not 0 for BW Image\n";
 		}
 		else
 		{
-			mphrase="ERROR: the channel index is not 0, 1 or 2 for ImageRGB\n";
+			mphrase="ERROR: the channel index is not 0, 1 or 2 for RGB Image\n";
 		}
 	}
 
@@ -84,10 +122,10 @@ class ErrorFormat : public std::exception
 private:
 	std::string mphrase;
 public:
-	ErrorFormat(std::string const& format) throw()
+	ErrorFormat(const int& spectra) throw()
 	{
 		std::string test_string1="BW";
-		if (test_string1.compare(format) == 0)
+		if (spectra==1)
 		{
 			mphrase="ERROR: trying to open an image that is not Black and White through ImageBW class\n";
 		}
@@ -102,6 +140,64 @@ public:
 		return mphrase.c_str();
 	}
 	virtual ~ErrorFormat() throw()
+	{}
+};
+
+
+/// Exception that prevents from calculating the distribution if intensity is above 255
+class ErrorIntensity : public std::exception
+{
+private:
+	std::string mphrase;
+public:
+	ErrorIntensity() throw()
+	{
+		mphrase="ERROR: trying to compute distribution with intensity above 255, try to rescale\n";
+	}
+
+	virtual const char* what() const throw()
+	{
+		return mphrase.c_str();
+	}
+	virtual ~ErrorIntensity() throw()
+	{}
+};
+
+
+/// Exception that prevents from using intensity distribution if not computed
+class ErrorDistribution : public std::exception
+{
+private:
+	std::string mphrase;
+public:
+	// Constructor that takes 3 possible arguments and throws different exception
+	// according to their nature:
+	// too_high_intensity / not_computed / out-dated
+	ErrorDistribution(const std::string& type) throw()
+	{
+		if (type=="too_high_intensity")
+		{
+			mphrase="ERROR: trying to compute distribution with intensity above 255, try to rescale\n";
+		}
+		else if (type=="not_computed")
+		{
+			mphrase="ERROR: trying to use distribution which is not computed\n";
+		}
+		else if (type=="out-dated")
+		{
+			mphrase="ERROR: trying to use distribution which is out-dated";
+		}
+		else
+		{
+			mphrase="ERROR: invalid attempt to use distribution";
+		}
+	}
+
+	virtual const char* what() const throw()
+	{
+		return mphrase.c_str();
+	}
+	virtual ~ErrorDistribution() throw()
 	{}
 };
 
