@@ -20,21 +20,21 @@
 // because it seems useless
 PixelBW::PixelBW()
 {
-	mformat="BW";
+	mspectra=1;
 	mintensity=0.0;
 }
 
 /// Overriding the copy constructor
 PixelBW::PixelBW(const PixelBW& copiedPixel)
 {
-	mformat=copiedPixel.mformat;
+	mspectra=copiedPixel.mspectra;
 	mintensity=copiedPixel.mintensity;
 }
 
 /// Constructs a BW Pixel with intensity specified in argument
 PixelBW::PixelBW(const double intensity)
 {
-	mformat="BW";
+	mspectra=1;
 	mintensity=intensity;
 }
 
@@ -45,7 +45,7 @@ double& PixelBW::operator[] (const int channel /*=0*/)
 {
 	if (channel!=0)
 	{
-		throw ErrorChannel(mformat);
+		throw ErrorChannel(mspectra);
 	}
 	return mintensity;
 }
@@ -54,7 +54,7 @@ const double& PixelBW::operator[] (const int channel /*=0*/) const
 {
 	if (channel!=0)
 	{
-		throw ErrorChannel(mformat);
+		throw ErrorChannel(mspectra);
 
 	}
 	return mintensity;

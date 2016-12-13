@@ -17,7 +17,7 @@
 /// Intensity for the 3 colors are set to 0.0 by default
 PixelRGB::PixelRGB() : Pixel()
 {
-	mformat="RGB";
+	mspectra=3;
 
 	mRintensity=0.0;
 	mGintensity=0.0;
@@ -27,6 +27,8 @@ PixelRGB::PixelRGB() : Pixel()
 /// Overriding the copy constructor
 PixelRGB::PixelRGB(const PixelRGB& copiedPixel) : Pixel(copiedPixel)
 {
+	mspectra=3;
+
 	mRintensity=copiedPixel.mRintensity;
 	mGintensity=copiedPixel.mGintensity;
 	mBintensity=copiedPixel.mBintensity;
@@ -53,7 +55,7 @@ double& PixelRGB::operator[](const int channel)
 	/// Throw an error if index is neither 1, 2 or 3
 	else
 	{
-		throw ErrorChannel(mformat);
+		throw ErrorChannel(mspectra);
 	}
 }
 
@@ -73,7 +75,7 @@ const double& PixelRGB::operator[](const int channel) const
 	}
 	else
 	{
-		throw ErrorChannel(mformat);
+		throw ErrorChannel(mspectra);
 	}
 }
 

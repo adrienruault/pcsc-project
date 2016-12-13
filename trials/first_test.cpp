@@ -14,6 +14,7 @@ using namespace cimg_library;
 
 int main(int argc, char* argv[])
 {
+	/*
 	CImg<double> image("len_std.jpg"), visu(500,400,1,3,0);
 	const unsigned char red[] = { 255,0,0 }, green[] = { 0,255,0 }, blue[] = { 0,0,255 };
 	image.blur(2.5);
@@ -32,8 +33,17 @@ int main(int argc, char* argv[])
 			visu.draw_graph(image.get_crop(0,y,0,1,image.width()-1,y,0,1),green,1,1,0,255,0);
 			visu.draw_graph(image.get_crop(0,y,0,2,image.width()-1,y,0,2),blue,1,1,0,255,0).display(draw_disp);
 		}
-		*/
 	}
+	*/
+
+	int a=3;
+	int& b=a;
+	b=9;
+
+	std::cout << a << "\n" << b;
+
+
+
 
 	return 0;
 }

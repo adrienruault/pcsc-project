@@ -6,16 +6,102 @@
  */
 
 #include <iostream>
+#include <vector>
+#include <typeinfo>
+
 //#include "Image.hpp"
 #include "CImg.h"
 #include "ImageBW.hpp"
+#include "ImageRGB.hpp"
 #include "PixelBW.hpp"
+#include "PixelRGB.hpp"
 
 using namespace cimg_library;
 using namespace std;
 
 int main(int argc, char* argv[])
 {
+
+	try
+	{
+		ImageBW img("lena.jpg");
+		cout << img(2,7) << "\n" << img(2,7,0) << "\n";
+		img(2,7,1);
+
+		ImageBW histo(512,256,255,"lenahisto.jpg");
+		//img.Display();
+		img.Histogram(histo);
+		cout << img.MaxI() << "\n";
+		cout << img.MinI() << "\n";
+	}
+	catch(std::exception const& e)
+	{
+		cerr << e.what();
+	}
+
+	try
+	{
+		ImageRGB color("len_std.jpg");
+		color(2,2,4);
+		color.Display();
+	}
+	catch(std::exception const& e)
+	{
+		cerr << e.what();
+	}
+
+	vector<int> vec;
+
+	vector<PixelBW> lourd;
+
+	cout << (typeid(int)==typeid(vec[0])) << "\n";
+	cout << (typeid(PixelBW)==typeid(int)) << "\n";
+
+
+	/*
+	ImageBW img("lena.jpg");
+	img.Display();
+	img.Save("test_of_saver.jpg");
+	*/
+
+
+	/*
+	cout << img(2,2,0) << "\n";
+	cout << img(511,40,0) << "\n";
+	cout << img(2,2,0) << "\n";
+	cout << img(2,2,0) << "\n";
+	cout << img(2,2,0) << "\n";
+
+
+	ImageBW trial(512,512,"this_is_a_test.jpg");
+	for(int i=0; i<100; i++)
+	{
+		for(int j=0; j<500; j++)
+		{
+			try
+			{
+				trial(i,j,0)=255;
+			}
+			catch(std::exception const& e)
+			{
+				cerr << e.what() << "\n";
+				abort();
+			}
+		}
+	}
+
+
+	trial.Display();
+	trial.Save();
+
+	*/
+
+
+
+
+
+
+
 	/*
 	PixelBW a(10.0);
 	a.ChangeI(20.0);
@@ -37,10 +123,9 @@ int main(int argc, char* argv[])
 	*/
 
 
-	ImageBW img("lena.jpg");
-	img.Display();
 
-	string name="len_std.jpg";
+
+
 
 
 	/*

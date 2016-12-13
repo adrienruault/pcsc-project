@@ -17,7 +17,7 @@ class Pixel
 {
 protected:
 	/// mformat can be either "undefined", "BW", or "RGB"
-	std::string mformat;
+	int mspectra;
 
 public:
 	// Virtual overloading of [] allowing to set and get the intensity of a pixel
