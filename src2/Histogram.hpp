@@ -19,12 +19,14 @@ public:
 };
 
 
-
-
 HistogramBW::HistogramBW(Image<PixelBW>& subject)
 : Image<PixelBW>(512, 300, 255, "histogram"+subject.GetName(), "no")
 {
+	// Computes the max number of pixels that have the same intensity
 	int greatest_pop_dist=subject.GreatestPopDist(0);
+
+	// Computes the ratio that scale the max intensity such that the max peak of the
+	// histogram reaches (3/4) of the height.
 	double ratio=0.75*(double)mheight/(double)greatest_pop_dist;
 	int nb_pixel;
 	int x;
@@ -40,9 +42,26 @@ HistogramBW::HistogramBW(Image<PixelBW>& subject)
 			mPmatrix[x+1][mheight-1-k][0]=0;
 		}
 	}
-	Image::Display();
-	Image::Save();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+ * HistogramRGB
+ */
+/*
+class HistogramRGB
+: public
+*/
 
 
 #endif /* SRC2_HISTOGRAM_HPP_ */

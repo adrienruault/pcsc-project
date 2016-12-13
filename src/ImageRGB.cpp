@@ -13,7 +13,7 @@
 
 using namespace cimg_library;
 
-/// Constructor that creates a black image with provided dimensions and name
+/// Constructor that creates a colored image with provided dimensions and name
 ImageRGB::ImageRGB(const int& width, const int& height, const std::string& name /*="undefined.jpg"*/)
 {
 	// Image format defined to Red Green Blue
@@ -179,7 +179,7 @@ void ImageRGB::Save() const
 void ImageRGB::Save(const std::string& save_name) const
 {
 	// Declare image using CImg library
-	CImg<double> img(mwidth,mheight,1,1,0);
+	CImg<double> img(mwidth,mheight,1,3,0);
 
 	// Transfer of the pixel value intensity
 	for (int i=0; i<mwidth; i++)

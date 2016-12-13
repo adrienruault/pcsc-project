@@ -98,7 +98,7 @@ int main(int argc, char* argv[])
 	}
 
 	*/
-
+	/*
 	Image<PixelBW> imgbw3(100,50,0,"mdistribution_test.jpg");
 	std::vector<int> k;
 	k=imgbw3.GetDistribution();
@@ -121,11 +121,22 @@ int main(int argc, char* argv[])
 		cout << k[i] << "\n";
 	}
 	cout << imgbw3(3,3) << "\n" << "Length vec: " << k.size() << "\n";
-
+	*/
 	Image<PixelBW> imglena("lena.jpg");
 	HistogramBW histo(imglena);
 
 	histo.Display();
+
+	cout << "\n\n";
+	vector<int> dist;
+	dist=imglena.GetDistribution();
+	for (int i=0; i<257; i++)
+	{
+		cout << dist[i] << "\n";
+	}
+
+	cout << "Max is: " << imglena.MaxI() << "\n";
+	cout << "Min is: " << imglena.MinI() << "\n";
 
 }
 

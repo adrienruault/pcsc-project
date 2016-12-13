@@ -343,6 +343,7 @@ void ImageBW::SetI(const double& new_intensity)
 	mdistribution[256]=0;
 }
 
+
 /// Method that creates an histogram that shows the distribution of pixel intensities
 /// The ImageBW instance histo provided as argument must match one requirement:
 /// 	-> It must have a width of 512 pixels

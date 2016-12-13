@@ -170,15 +170,26 @@ class ErrorDistribution : public std::exception
 private:
 	std::string mphrase;
 public:
-	ErrorDistribution(const int& type) throw()
+	// Constructor that takes 3 possible arguments and throws different exception
+	// according to their nature:
+	// too_high_intensity / not_computed / out-dated
+	ErrorDistribution(const std::string& type) throw()
 	{
-		if (type==1)
+		if (type=="too_high_intensity")
 		{
 			mphrase="ERROR: trying to compute distribution with intensity above 255, try to rescale\n";
 		}
-		else if (type==2)
+		else if (type=="not_computed")
 		{
 			mphrase="ERROR: trying to use distribution which is not computed\n";
+		}
+		else if (type=="out-dated")
+		{
+			mphrase="ERROR: trying to use distribution which is out-dated";
+		}
+		else
+		{
+			mphrase="ERROR: invalid attempt to use distribution";
 		}
 	}
 

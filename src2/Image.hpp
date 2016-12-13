@@ -10,6 +10,7 @@
 
 #include <iostream>
 #include <vector>
+#include <limits>
 
 #include "CImg.h"
 
@@ -65,10 +66,14 @@ public:
 	void SetI(const double& new_intensity);
 	// MaxI computes maximum intensity over all possible channel
 	double MaxI() const;
+	// MinI computes minimum intensity over all possible channels
+	double MinI() const;
+	// This rescale just multiply all pixel intensities by a factor computed such that
+	// the highest intensity is fit to 255
 	void Rescale();
 	std::vector<int> GetDistribution(const int& channel=0) const;
 	void UpdateDistribution(const int& channel=0);
-	int GreatestPopDist(const int& channel=0);
+	int GreatestPopDist(const int& channel=0) const;
 
 
 	/*
@@ -485,6 +490,11 @@ std::vector<int> Image<P>::GetDistribution(const int& channel /*=0*/) const
 	{
 		throw ErrorChannel(mspectra);
 	}
+	if (mdistribution[channel][256] != 1)
+	{
+		// too_high_intensity / not_computed / out-dated
+		throw ErrorDistribution("out-dated");
+	}
 	return mdistribution[channel];
 }
 
@@ -528,7 +538,7 @@ void Image<P>::UpdateDistribution(const int& channel /*=0*/)
 template<typename P>
 double Image<P>::MaxI() const
 {
-	double max=0;
+	double max=-std::numeric_limits<double>::infinity();;
 	for(int i=0; i<mwidth; i++)
 	{
 		for(int j=0; j<mheight; j++)
@@ -543,6 +553,28 @@ double Image<P>::MaxI() const
 		}
 	}
 	return max;
+}
+
+
+/// Methods that output the minimum pixel intensity of the image over all possible channels
+template<typename P>
+double Image<P>::MinI() const
+{
+	double min=std::numeric_limits<double>::infinity();
+	for(int i=0; i<mwidth; i++)
+	{
+		for(int j=0; j<mheight; j++)
+		{
+			for(int c=0; c<mspectra; c++)
+			{
+				if (mPmatrix[i][j][c] < min)
+				{
+					min=mPmatrix[i][j][c];
+				}
+			}
+		}
+	}
+	return min;
 }
 
 /// Methods that rescale the pixel intensity so that the max value is 255
@@ -574,7 +606,7 @@ void Image<P>::Rescale()
 
 /// Method that
 template <typename P>
-int Image<P>::GreatestPopDist(const int& channel /*=0*/)
+int Image<P>::GreatestPopDist(const int& channel /*=0*/) const
 {
 	// Check if the channel request is allowed
 	if (channel < 0 or channel >= mspectra)
@@ -585,14 +617,15 @@ int Image<P>::GreatestPopDist(const int& channel /*=0*/)
 	// Check if distribution has been computed
 	if (mdistribution[channel].size() != 257)
 	{
-		throw ErrorDistribution(2);
+		// too_high_intensity / not_computed / out-dated
+		throw ErrorDistribution("not_computed");
 	}
 
 	// Check if distribution is up-to-date
-	if (mdistribution[channel][256] == 0)
+	if (mdistribution[channel][256] != 1)
 	{
-		Image<P>::UpdateDistribution(channel);
-		std::cerr << "WARNING: the distribution has been updated";
+		// too_high_intensity / not_computed / out-dated
+		throw ErrorDistribution("out-dated");
 	}
 	int greatest_pop=0;
 	for(int i=0; i<256; i++)
