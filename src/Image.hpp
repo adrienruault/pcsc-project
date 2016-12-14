@@ -11,6 +11,7 @@
 #include <iostream>
 #include <vector>
 #include <limits>
+#include <typeinfo>
 
 #include "CImg.h"
 
@@ -44,7 +45,10 @@ protected:
 	std::vector<std::vector<int> > mdistribution;
 
 public:
-	Image(const int& width, const int& height, const double& intensity =0, const std::string& name="undefined.jpg", const std::string& compute_distrib="yes");
+
+
+	Image(const int& width, const int& height, const double& intensity=0, const std::string& name="undefined.jpg", const std::string& compute_distrib="yes");
+
 	Image(const std::string& name, const std::string& compute_distrib="yes");
 	Image(const Image<P>& image_to_copy);
 
@@ -74,6 +78,8 @@ public:
 	std::vector<int> GetDistribution(const int& channel=0) const;
 	void UpdateDistribution(const int& channel=0);
 	int GreatestPopDist(const int& channel=0) const;
+
+	Image<P> AddMirrorBoundary(const Image<P>& img, const int& left, const int& right, const int& top, const int& bot) const;
 
 
 	/*
@@ -406,6 +412,8 @@ void Image<P>::Display() const
 	// Convert mname which is a string in const char*
 	const char* char_name = mname.c_str();
 	CImgDisplay disp_img(img,char_name);
+	// Seems to be mandatory to wait for the user to close
+	//the displayed image to keep going
 	while (!disp_img.is_closed())
 	{
 		disp_img.wait();
@@ -637,6 +645,31 @@ int Image<P>::GreatestPopDist(const int& channel /*=0*/) const
 	}
 	return greatest_pop;
 }
+
+
+
+template<typename P>
+Image<P> Image<P>::AddMirrorBoundary(const Image<P>& img, const int& left, const int& right, const int& top, const int& bot) const
+{
+  Image<P> output(left + img.Width() +right, top + img.Height() + bot );
+  for (size_t x = 0; x < output.Width(); x++) {
+    for (size_t y = 0; y < output.Height(); y++) {
+      //std ::cerr << "ok";
+      int i;
+      int j;
+      if (x < left) {i = left-x-1;}
+      else if (x >= (left + img.Width())) {i = -1+img.Width()-(x-(left+img.Width()));}
+      else {i = x-left;}
+      if (y < top) {j = top-y-1;}
+      else if (y >= top + img.Height()) {j =  -1+img.Height()-(y-(top+img.Height()));}
+      else {j = y-top;}
+      output(x,y) = img(i,j);
+      //if (x<100 and y<50) output(x,y) = 0;
+    }
+  }
+  return output;
+}
+
 
 
 
