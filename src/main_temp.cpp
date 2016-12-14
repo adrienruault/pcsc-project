@@ -181,8 +181,6 @@ int main(int argc, char* argv[])
 	cout << caca.size();
 	*/
 
-}*/
-
 
 	Image<PixelBW> imglena("lena.jpg");
 	Fourier_Transform<Image<PixelBW> > lena_fourier(imglena);

@@ -78,10 +78,8 @@ public:
 	int GreatestPopDist(const int& channel=0) const;
 
 	Image<P> AddMirrorBoundary(const int& left, const int& right, const int& top, const int& bot) const;
-<<<<<<< HEAD
-=======
 	Image<P> log_Rescale() const;
->>>>>>> fe98e499f5b932d9610c737ca7057a6026b936ce
+
 
 
 	/*
@@ -690,21 +688,16 @@ int Image<P>::GreatestPopDist(const int& channel /*=0*/) const
 template<typename P>
 Image<P> Image<P>::AddMirrorBoundary(const int& left, const int& right, const int& top, const int& bot) const
 {
-<<<<<<< HEAD
   Image<P> output(left+Image::Width()+right, top+Image::Height()+bot);
 
   int img_width = Image::Width();
   int img_height = Image::Height();
 
-=======
-  Image<P> output(left + Width() +right, top + Height() + bot );
->>>>>>> fe98e499f5b932d9610c737ca7057a6026b936ce
   for (size_t x = 0; x < output.Width(); x++) {
     for (size_t y = 0; y < output.Height(); y++) {
       //std ::cerr << "ok";
       int i;
       int j;
-<<<<<<< HEAD
       if (x < left)
       {
     	  i = left-x-1;
@@ -730,15 +723,6 @@ Image<P> Image<P>::AddMirrorBoundary(const int& left, const int& right, const in
     	  j = y-top;
       }
       output(x,y) = (*this)(i,j,0);
-=======
-      if (x < left) {i = left-x-1;}
-      else if (x >= (left + Width())) {i = -1+Width()-(x-(left+Width()));}
-      else {i = x-left;}
-      if (y < top) {j = top-y-1;}
-      else if (y >= top + Height()) {j =  -1+Height()-(y-(top+Height()));}
-      else {j = y-top;}
-      output(x,y) = (*this)(i,j);
->>>>>>> fe98e499f5b932d9610c737ca7057a6026b936ce
       //if (x<100 and y<50) output(x,y) = 0;
     }
   }
