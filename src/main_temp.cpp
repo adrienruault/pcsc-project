@@ -12,6 +12,11 @@
 
 //#include "Image.hpp"
 #include "CImg.h"
+//#include "Image.hpp""
+#include "Fourier_Transform.hpp"
+//#include "ImageBW.hpp"
+//#include "ImageRGB.hpp"
+
 #include "Image.hpp"
 #include "PixelBW.hpp"
 #include "PixelRGB.hpp"
@@ -124,12 +129,9 @@ int main(int argc, char* argv[])
 
 	*/
 
-
-
-
-	/*
-
+/*
 	Image<PixelBW> imglena("lena.jpg");
+
 	HistogramBW histo(imglena);
 
 	//histo.Display();
@@ -143,6 +145,7 @@ int main(int argc, char* argv[])
 	}
 
 	cout << "Max is: " << imglena.MaxI() << "\n";
+
 	cout << "Min is: " << imglena.MinI() << "\n";
 
 
@@ -156,9 +159,6 @@ int main(int argc, char* argv[])
 	{
 		cerr << e.what();
 	}
-
-
-
 
 
 	*/
@@ -181,9 +181,14 @@ int main(int argc, char* argv[])
 	cout << caca.size();
 	*/
 
+}*/
+
+
+	Image<PixelBW> imglena("lena.jpg");
+	Fourier_Transform<Image<PixelBW> > lena_fourier(imglena);
+	lena_fourier.Display();
+
+
+
+	return 0;
 }
-
-
-
-
-

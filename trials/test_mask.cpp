@@ -20,11 +20,11 @@ int main()
 
   CImg<double> filtered = m.apply(CImg<double>("../resources/lena.jpg"));
 
-  for (size_t i = 0; i < 100; i++) {
+  for (size_t i = 0; i < 5; i++) {
     filtered = m.apply(filtered);
   }
 
-  filtered.save("../resources/lena_maskedx100.jpg");
+  filtered.save("../resources/lena_maskedx5.jpg");
 
   /*int a = 512;
 
