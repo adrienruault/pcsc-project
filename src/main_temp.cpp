@@ -12,15 +12,12 @@
 
 //#include "Image.hpp"
 #include "CImg.h"
-<<<<<<< HEAD
-//#include "Image.hpp"
-#include "Histogram.hpp"
+//#include "Image.hpp""
 #include "Fourier_Transform.hpp"
 //#include "ImageBW.hpp"
 //#include "ImageRGB.hpp"
-=======
+
 #include "Image.hpp"
->>>>>>> 2fde6fb081cae9a81faffca2fbaf18be02750f1c
 #include "PixelBW.hpp"
 #include "PixelRGB.hpp"
 #include "HistogramBW.hpp"
@@ -176,9 +173,9 @@ int main(int argc, char* argv[])
 }*/
 
 
-	/*Image<PixelBW> imglena("lena.jpg");
+	Image<PixelBW> imglena("lena.jpg");
 	Fourier_Transform<Image<PixelBW> > lena_fourier(imglena);
-	lena_fourier.Display();*/
+	lena_fourier.Display();
 
 
 

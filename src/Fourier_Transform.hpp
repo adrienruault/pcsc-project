@@ -4,6 +4,10 @@
 #include "ComplexNumber.hpp"
 #include "Image.hpp"
 
+/// This class contains the results of the computation of the Fourier Transform.
+/// This result is stocked in 4 images : 2 images representing the Imaginary
+/// part and the Real part of the transform, and 2 others representing
+/// the modulus and the argument.
 template<typename I>
 class Fourier_Transform
 {
@@ -27,7 +31,10 @@ public:
 
 };
 
-
+/// This function is the algorithm for the fft in one dimension.
+/// It is called by the constructor of the Fourier_Transform class
+/// to compute the fourier transform of both the rows and the columns
+/// of the image passed as argument of the constructor.
 std::vector<ComplexNumber> fft_1D(const std::vector<ComplexNumber>& signal)
 {
 
@@ -54,6 +61,11 @@ std::vector<ComplexNumber> fft_1D(const std::vector<ComplexNumber>& signal)
   }
 }
 
+
+
+
+/// Compute the Fourier Transform of an image BW or RGB and constructs
+/// a Fourier_Transform object.
 template<typename I>
 Fourier_Transform<I>::Fourier_Transform( const I& img)
           :realPart(img.Width(),img.Height()), imPart(img.Width(),img.Height()),
@@ -94,12 +106,14 @@ Fourier_Transform<I>::Fourier_Transform( const I& img)
   }
 }
 
-/*template<typename I>
+/// This method shifts the zero frequence of an image contained in the
+/// Fourier_Transform class to the center of this image.
+template<typename I>
 I Fourier_Transform<I>::shift_zero_to_center(const I& img) const
 {
   int N1 = img.Width();
   int N2 = img.Height();
-  I img_mirror(add_mirror_boundary(img, N1-1,0,N2-1,0));
+  I img_mirror(img.AddMirrorBoundary(N1/2,0,N2/2,0));
   I img_shifted(N1,N2,0);
   for (size_t x = 0; x < N1 ; x++) {
     for (size_t y = 0; y < N2; y++) {
@@ -109,14 +123,16 @@ I Fourier_Transform<I>::shift_zero_to_center(const I& img) const
   return img_shifted;
 }
 
+/// This method displays the modulus of the Fourier_Transform, with a log scale,
+/// and the zero frequence centered.
 template<typename I>
 void Fourier_Transform<I>::Display() const
 {
-  shift_zero_to_center(modulus).Display();
+  shift_zero_to_center(modulus.log_Rescale()).Display();
 }
 
 template<typename I>
-I Fourier_Transform<I>::getArgument() const;
+I Fourier_Transform<I>::getArgument() const
 {
   return argument;
 }
@@ -137,7 +153,7 @@ template<typename I>
 I Fourier_Transform<I>::GetrealPart() const
 {
   return realPart;
-}*/
+}
 
 
 

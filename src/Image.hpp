@@ -79,7 +79,8 @@ public:
 	void UpdateDistribution(const int& channel=0);
 	int GreatestPopDist(const int& channel=0) const;
 
-	Image<P> AddMirrorBoundary(const Image<P>& img, const int& left, const int& right, const int& top, const int& bot) const;
+	Image<P> AddMirrorBoundary(const int& left, const int& right, const int& top, const int& bot) const;
+	Image<P> log_Rescale() const;
 
 
 	/*
@@ -611,6 +612,19 @@ void Image<P>::Rescale()
 	}
 }
 
+template<typename P>
+Image<P> Image<P>::log_Rescale() const
+{
+	Image<P> img(Width(),Height());
+	for (size_t i = 0; i < Width(); i++) {
+		for (size_t j = 0; j < Height(); j++) {
+			img(i,j) = log((*this)(i,j));
+		}
+	}
+	img.Rescale();
+	return img;
+}
+
 
 /// Method that
 template <typename P>
@@ -649,26 +663,28 @@ int Image<P>::GreatestPopDist(const int& channel /*=0*/) const
 
 
 template<typename P>
-Image<P> Image<P>::AddMirrorBoundary(const Image<P>& img, const int& left, const int& right, const int& top, const int& bot) const
+Image<P> Image<P>::AddMirrorBoundary(const int& left, const int& right, const int& top, const int& bot) const
 {
-  Image<P> output(left + img.Width() +right, top + img.Height() + bot );
+  Image<P> output(left + Width() +right, top + Height() + bot );
   for (size_t x = 0; x < output.Width(); x++) {
     for (size_t y = 0; y < output.Height(); y++) {
       //std ::cerr << "ok";
       int i;
       int j;
       if (x < left) {i = left-x-1;}
-      else if (x >= (left + img.Width())) {i = -1+img.Width()-(x-(left+img.Width()));}
+      else if (x >= (left + Width())) {i = -1+Width()-(x-(left+Width()));}
       else {i = x-left;}
       if (y < top) {j = top-y-1;}
-      else if (y >= top + img.Height()) {j =  -1+img.Height()-(y-(top+img.Height()));}
+      else if (y >= top + Height()) {j =  -1+Height()-(y-(top+Height()));}
       else {j = y-top;}
-      output(x,y) = img(i,j);
+      output(x,y) = (*this)(i,j);
       //if (x<100 and y<50) output(x,y) = 0;
     }
   }
   return output;
 }
+
+
 
 
 
