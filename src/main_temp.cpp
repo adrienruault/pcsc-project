@@ -157,16 +157,29 @@ int main(int argc, char* argv[])
 		cerr << e.what();
 	}
 
+
+
+
+
 	*/
 
 	// Add mirror boundary
+
+	Image<PixelRGB> lenacolor("len_std.jpg");
+	lenacolor.Display();
+
 	Image<PixelBW> lena("lena.jpg");
-	//lena.Display();
-	Image<PixelBW> boundary=lena.AddMirrorBoundary(lena,100,100,100,100);
+
+	lena.Display();
+
+	Image<PixelBW> boundary=lena.AddMirrorBoundary(100,100,100,100);
 
 	boundary.Display();
 
-
+	/*
+	vector<vector<int> > caca;
+	cout << caca.size();
+	*/
 
 }
 

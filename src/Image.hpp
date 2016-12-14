@@ -45,8 +45,8 @@ protected:
 	std::vector<std::vector<int> > mdistribution;
 
 public:
-	Image(const int& width, const int& height, const double& intensity=0, const std::string& name="undefined.jpg", const std::string& compute_distrib="yes");
-	Image(const std::string& name, const std::string& compute_distrib="yes");
+	Image(const int& width, const int& height, const double& intensity=0, const std::string& name="undefined.jpg", const std::string& compute_distrib="no");
+	Image(const std::string& name, const std::string& compute_distrib="no");
 	Image(const Image<P>& image_to_copy);
 
 	// Virtual destructor needed for purely abstract class
@@ -76,7 +76,7 @@ public:
 	void UpdateDistribution(const int& channel=0);
 	int GreatestPopDist(const int& channel=0) const;
 
-	Image<P> AddMirrorBoundary(const Image<P>& img, const int& left, const int& right, const int& top, const int& bot) const;
+	Image<P> AddMirrorBoundary(const int& left, const int& right, const int& top, const int& bot) const;
 
 
 	/*
@@ -112,7 +112,7 @@ public:
 /// not provided.
 /// It names the image with the provided name.
 template<typename P>
-Image<P>::Image(const int& width, const int& height, const double& intensity /*=0*/, const std::string& name /*="undefined.jpg"*/, const std::string& compute_distrib /*="yes"*/)
+Image<P>::Image(const int& width, const int& height, const double& intensity /*=0*/, const std::string& name /*="undefined.jpg"*/, const std::string& compute_distrib /*="no"*/)
 {
 	if (typeid(P)==typeid(PixelBW))
 	{
@@ -133,13 +133,14 @@ Image<P>::Image(const int& width, const int& height, const double& intensity /*=
 	mwidth=width;
 	mheight=height;
 
+	/*
 	// Image dimension:
 	mPmatrix.reserve(mwidth);
 	for (int i=0; i<mwidth; i++)
 	{
 		mPmatrix[i].reserve(mheight);
 	}
-
+	*/
 
 	for (int i=0; i<mwidth; i++)
 	{
@@ -193,12 +194,20 @@ Image<P>::Image(const int& width, const int& height, const double& intensity /*=
 			mdistribution[c][256]=1;
 		}
 	}
+	else
+	{
+		mdistribution.reserve(mspectra);
+		for(int c=0; c<mspectra; c++)
+		{
+			mdistribution.push_back(std::vector<int>(1,0));
+		}
+	}
 }
 
 
 /// Constructor that...
 template <typename P>
-Image<P>::Image(const std::string& name, const std::string& compute_distrib /*="yes"*/)
+Image<P>::Image(const std::string& name, const std::string& compute_distrib /*="no"*/)
 {
 	// In the future: try to implement a control on the string name
 	// to verify that it is a JPG file
@@ -237,12 +246,14 @@ Image<P>::Image(const std::string& name, const std::string& compute_distrib /*="
 	mwidth=img.width();
 	mheight=img.height();
 
+	/*
 	mPmatrix.reserve(mwidth);
 	// Reserve the memory necessary for mPmatrix that contains the pixels of the image
 	for (int i=0; i<mwidth; i++)
 	{
 		mPmatrix[i].reserve(mheight);
 	}
+	*/
 
 	// Transfer Black and White intensities of the image into the matrix
 	// Please be careful that the indexing corresponds to the IP convention
@@ -294,6 +305,14 @@ Image<P>::Image(const std::string& name, const std::string& compute_distrib /*="
 			mdistribution[c][256]=1;
 		}
 	}
+	else
+	{
+		mdistribution.reserve(mspectra);
+		for(int c=0; c<mspectra; c++)
+		{
+			mdistribution.push_back(std::vector<int>(1,0));
+		}
+	}
 }
 
 
@@ -322,7 +341,11 @@ double& Image<P>::operator()(const int& x, const int& y, const int& channel /*=0
 		{
 			throw ErrorChannel(mspectra);
 		}
-		mdistribution[channel][256]=0;
+		// checking if mdistribution has been computed
+		if(mdistribution[channel].size()==257)
+		{
+			mdistribution[channel][256]=0;
+		}
 		return mPmatrix[x][y][channel];
 	}
 	else
@@ -587,6 +610,7 @@ template<typename P>
 void Image<P>::Rescale()
 {
 	double max_intensity = Image<P>::MaxI();
+	double min_intensity = Image<P>::MinI();
 	double factor=(double)255/(max_intensity);
 
 	int relay;
@@ -646,21 +670,43 @@ int Image<P>::GreatestPopDist(const int& channel /*=0*/) const
 
 
 template<typename P>
-Image<P> Image<P>::AddMirrorBoundary(const Image<P>& img, const int& left, const int& right, const int& top, const int& bot) const
+Image<P> Image<P>::AddMirrorBoundary(const int& left, const int& right, const int& top, const int& bot) const
 {
-  Image<P> output(left + img.Width() +right, top + img.Height() + bot );
+  Image<P> output(left+Image::Width()+right, top+Image::Height()+bot);
+
+  int img_width = Image::Width();
+  int img_height = Image::Height();
+
   for (size_t x = 0; x < output.Width(); x++) {
     for (size_t y = 0; y < output.Height(); y++) {
       //std ::cerr << "ok";
       int i;
       int j;
-      if (x < left) {i = left-x-1;}
-      else if (x >= (left + img.Width())) {i = -1+img.Width()-(x-(left+img.Width()));}
-      else {i = x-left;}
-      if (y < top) {j = top-y-1;}
-      else if (y >= top + img.Height()) {j =  -1+img.Height()-(y-(top+img.Height()));}
-      else {j = y-top;}
-      output(x,y) = img(i,j);
+      if (x < left)
+      {
+    	  i = left-x-1;
+      }
+      else if (x >= (left + img_width))
+      {
+    	  i = -1+img_width-(x-(left+img_width));
+      }
+      else
+      {
+    	  i = x-left;
+      }
+      if (y < top)
+      {
+    	  j = top-y-1;
+      }
+      else if (y >= top + img_height)
+      {
+    	  j =  -1+img_height-(y-(top+img_height));
+      }
+      else
+      {
+    	  j = y-top;
+      }
+      output(x,y) = (*this)(i,j,0);
       //if (x<100 and y<50) output(x,y) = 0;
     }
   }
