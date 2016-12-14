@@ -5,6 +5,7 @@
  *      Author: adrien
  */
 
+
 #include <iostream>
 #include <vector>
 #include <typeinfo>
@@ -12,11 +13,10 @@
 //#include "Image.hpp"
 #include "CImg.h"
 #include "Image.hpp"
-#include "Histogram.hpp"
-//#include "ImageBW.hpp"
-//#include "ImageRGB.hpp"
 #include "PixelBW.hpp"
 #include "PixelRGB.hpp"
+#include "HistogramBW.hpp"
+#include "HistogramRGB.hpp"
 
 using namespace cimg_library;
 using namespace std;
@@ -121,11 +121,18 @@ int main(int argc, char* argv[])
 		cout << k[i] << "\n";
 	}
 	cout << imgbw3(3,3) << "\n" << "Length vec: " << k.size() << "\n";
+
 	*/
+
+
+
+
+	/*
+
 	Image<PixelBW> imglena("lena.jpg");
 	HistogramBW histo(imglena);
 
-	histo.Display();
+	//histo.Display();
 
 	cout << "\n\n";
 	vector<int> dist;
@@ -137,6 +144,29 @@ int main(int argc, char* argv[])
 
 	cout << "Max is: " << imglena.MaxI() << "\n";
 	cout << "Min is: " << imglena.MinI() << "\n";
+
+
+	try
+	{
+		Image<PixelRGB> imglen_std("len_std.jpg");
+		HistogramRGB histoRGB(imglen_std);
+		histoRGB.Display();
+	}
+	catch(std::exception const& e)
+	{
+		cerr << e.what();
+	}
+
+	*/
+
+	// Add mirror boundary
+	Image<PixelBW> lena("lena.jpg");
+	//lena.Display();
+	Image<PixelBW> boundary=lena.AddMirrorBoundary(lena,100,100,100,100);
+
+	boundary.Display();
+
+
 
 }
 
