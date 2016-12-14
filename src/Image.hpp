@@ -44,7 +44,7 @@ protected:
 	std::vector<std::vector<int> > mdistribution;
 
 public:
-	Image(const int& width, const int& height, const double& intensity, const std::string& name="undefined.jpg", const std::string& compute_distrib="yes");
+	Image(const int& width, const int& height, const double& intensity =0, const std::string& name="undefined.jpg", const std::string& compute_distrib="yes");
 	Image(const std::string& name, const std::string& compute_distrib="yes");
 	Image(const Image<P>& image_to_copy);
 

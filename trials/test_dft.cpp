@@ -74,7 +74,7 @@ int main()
   }*/
 
   // Test fft and fft inv on lena
-  CImg<double> img("../resources/lena.jpg");
+  /*CImg<double> img("../resources/lena.jpg");
   fourier_transform fft = compute_fft(img);
 
   fft.realPart.save("../resources/fft_lena_realPart.jpg");
@@ -82,7 +82,7 @@ int main()
   fft.modulus.save("../resources/fft_cecilia_modulus.jpg");
   fft.argument.save("../resources/fft_lena_argument.jpg");
 
-  compute_inv_fft(fft).save("../resources/fft_lena_reconstructed.jpg");
+  compute_inv_fft(fft).save("../resources/fft_lena_reconstructed.jpg");*/
 
   // Test fft and fft inv on rect
   /*CImg<double> img(generate_rect(512));
@@ -130,7 +130,7 @@ int main()
 
 
   // Test mask applied on Fourier
-  /*double a = 16.0*16.0;
+  double a = 16.0*16.0;
 
   std::vector<double> a1 {1/a,4/a,6/a,4/a,1/a};
   std::vector<double> a2 {4/a,16/a,24/a,16/a,4/a};
@@ -143,9 +143,9 @@ int main()
   CImg<double> mask(512,512);
   CImg<double> img("../resources/lena.jpg");
 
-  for (size_t i = 0; i < 5; i++) {
-    for (size_t j = 0; j < 5; j++) {
-      mask(i,j) = matrice[j][i];
+  for (size_t i = 254; i < 254+5; i++) {
+    for (size_t j = 254; j < 254+5; j++) {
+      mask(i,j) = matrice[j-254][i-254];
     }
   }
 
@@ -169,7 +169,7 @@ int main()
     }
   }
 
-  compute_inv_fft(fftimg).save("../resources/lenafourierfilteredx100.jpg");*/
+  compute_inv_fft(fftimg).save("../resources/lenafourierfilteredx100.jpg");
 
   // Test filtering in Fourier domain
   /*CImg<double> img("../resources/lena.jpg");

@@ -25,6 +25,10 @@ add_executable(ex1lab2IP ex1lab2IP.cpp)
 target_link_libraries(ex1lab2IP "-lX11")
 target_link_libraries(ex1lab2IP "-pthread")
 
-add_executable(test_mask image_tools.h image_tools.cpp MyMask.h MyMask.cpp test_mask.cpp )
+add_executable(test_mask image_tools.h image_tools.cpp MyMask.h MyMask.cpp test_mask.cpp ComplexNumber.cpp ComplexNumber.hpp)
 target_link_libraries(test_mask "-lX11")
 target_link_libraries(test_mask "-pthread")
+
+add_executable(test_dft test_dft.cpp image_tools.h image_tools.cpp  ComplexNumber.hpp ComplexNumber.cpp)
+target_link_libraries(test_dft "-lX11")
+target_link_libraries(test_dft "-pthread")

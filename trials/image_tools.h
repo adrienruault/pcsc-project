@@ -10,7 +10,7 @@
 #include "ComplexNumber.hpp"
 #include <cmath>
 
-/// Structure containing both the module and the phase of a fourier transform of an image.
+/// Structure containing the module, the phase, the imaginary part and the real part of an image fourier transform.
 struct fourier_transform{
   cimg_library::CImg<double> modulus;
   cimg_library::CImg<double> argument;
