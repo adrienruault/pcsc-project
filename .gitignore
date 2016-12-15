@@ -7,6 +7,10 @@
 **/CMakeCache.txt
 **/*.cmake
 
+# Untrack PNG and JPG files
+**/*.jpg
+**/*.png
+
 # Untrack project files (don't know yet what they are related to but likely to Eclipse)
 **/*.project
 **/*.cproject
