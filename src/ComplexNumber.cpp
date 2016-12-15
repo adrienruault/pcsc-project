@@ -62,6 +62,13 @@ ComplexNumber& ComplexNumber::operator=(const ComplexNumber& z)
    return *this;
 }
 
+ComplexNumber& ComplexNumber::operator=(const double& x)
+{
+	mRealPart=x;
+	mImaginaryPart=0;
+	return *this;
+}
+
 // Overloading the unary - operator
 ComplexNumber ComplexNumber::operator-() const
 {

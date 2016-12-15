@@ -26,6 +26,7 @@ public:
 	ComplexNumber CalculatePower(double n) const;
 
 	ComplexNumber& operator=(const ComplexNumber& z);
+	ComplexNumber& operator=(const double& x);
 
 	ComplexNumber operator-() const;
 
@@ -56,18 +57,18 @@ public:
 
 };
 
-ComplexNumber operator*(const double& d, const ComplexNumber& z);
+	ComplexNumber operator*(const double& d, const ComplexNumber& z);
 
-double GetRealPart(ComplexNumber z);
+	double GetRealPart(ComplexNumber z);
 
-double GetImaginaryPart(ComplexNumber z);
+	double GetImaginaryPart(ComplexNumber z);
 
-std::vector<ComplexNumber> getRow(const std::vector<std::vector<ComplexNumber> >& arr, int i);
+	std::vector<ComplexNumber> getRow(const std::vector<std::vector<ComplexNumber> >& arr, int i);
 
-std::vector<ComplexNumber> getColumn(const std::vector<std::vector<ComplexNumber> >& arr, int i);
+	std::vector<ComplexNumber> getColumn(const std::vector<std::vector<ComplexNumber> >& arr, int i);
 
-void setRow(std::vector<std::vector<ComplexNumber> >& arr, const std::vector<ComplexNumber>& row, int i);
+	void setRow(std::vector<std::vector<ComplexNumber> >& arr, const std::vector<ComplexNumber>& row, int i);
 
-void setColumn(std::vector<std::vector<ComplexNumber> >& arr, const std::vector<ComplexNumber>& column, int i);
+	void setColumn(std::vector<std::vector<ComplexNumber> >& arr, const std::vector<ComplexNumber>& column, int i);
 
 #endif

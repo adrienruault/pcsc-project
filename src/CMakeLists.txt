@@ -15,3 +15,5 @@ HistogramBW.hpp HistogramBW.cpp HistogramRGB.hpp HistogramRGB.cpp Fourier_Transf
 ComplexNumber.hpp ComplexNumber.cpp)
 target_link_libraries(user "-lX11")
 target_link_libraries(user "-pthread")
+
+add_executable(hanning_low_pass hanning_low_pass.cpp ComplexNumber.hpp ComplexNumber.cpp)
