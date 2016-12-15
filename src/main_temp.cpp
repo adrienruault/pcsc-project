@@ -12,14 +12,15 @@
 
 //#include "Image.hpp"
 #include "CImg.h"
-//#include "Image.hpp""
+#include "Image.hpp"
 #include "Fourier_Transform.hpp"
+#include "Filter.hpp"
 //#include "ImageBW.hpp"
 //#include "ImageRGB.hpp"
 
-#include "Image.hpp"
-#include "PixelBW.hpp"
-#include "PixelRGB.hpp"
+//#include "Image.hpp"
+//#include "PixelBW.hpp"
+//#include "PixelRGB.hpp"
 #include "HistogramBW.hpp"
 #include "HistogramRGB.hpp"
 
@@ -165,26 +166,51 @@ int main(int argc, char* argv[])
 
 	// Add mirror boundary
 
-	Image<PixelRGB> lenacolor("len_std.jpg");
-	lenacolor.Display();
+	//Image<PixelRGB> lenacolor("len_std.jpg");
+	//lenacolor.Display();
 
-	Image<PixelBW> lena("lena.jpg");
+	/*Image<PixelBW> lena("lena.jpg");
 
 	lena.Display();
 
 	Image<PixelBW> boundary=lena.AddMirrorBoundary(100,100,100,100);
 
-	boundary.Display();
+	boundary.Display();*/
 
 	/*
 	vector<vector<int> > caca;
 	cout << caca.size();
 	*/
 
+	/*int n =8;
+  Image<PixelBW> imgg(n,n);
+  imgg(0, 1) = 255;
+  imgg(2,3) = 122;
+	imgg(0,0) = 10;
+	imgg(4,2) = 54;
+	imgg(1,3) = 171;
+	imgg(1, 0) = 255-46;
+	imgg(3,2) = 38+122;
+	imgg(6,6) = 107;
+	imgg(2,4) = 2;
+	imgg(3,1) = 249;
 
-	Image<PixelBW> imglena("lena.jpg");
-	Fourier_Transform<Image<PixelBW> > lena_fourier(imglena);
+	Fourier_Transform<Image<PixelBW > > img(imgg);
+		for (size_t j = 0; j < n; j++) {
+      for (size_t i = 0; i < n; i++) {
+        std::cout << int(img.getModulus()(i,j)) << " ";
+      }
+      std::cout  << '\n';
+    }*/
+
+	Image<PixelRGB> imglena("../resources/rgb.jpg");
+	Fourier_Transform<Image<PixelRGB> > lena_fourier(imglena);
+	std::cout << imglena.GetSpectra() << std::endl;
+	std::cout << lena_fourier.getModulus()(255,255) << std::endl;
+	std::cout << lena_fourier.getModulus()(256,256) << std::endl;
 	lena_fourier.Display();
+	Image<PixelRGB> lenareconstructed(lena_fourier);
+	lenareconstructed.Display();
 
 
 

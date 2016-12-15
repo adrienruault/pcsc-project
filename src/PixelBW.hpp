@@ -23,6 +23,7 @@ private:
 public:
 	PixelBW();
 	PixelBW(const PixelBW& copiedPixel);
+	PixelBW& operator=(const PixelBW& pix);
 	/// Construct Black and White Pixel with specified intensity
 	PixelBW(const double intensity);
 
