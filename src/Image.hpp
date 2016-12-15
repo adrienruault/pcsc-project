@@ -14,13 +14,15 @@
 #include <typeinfo>
 
 #include "CImg.h"
-
+#include "ComplexNumber.hpp"
 #include "PixelBW.hpp"
 #include "PixelRGB.hpp"
 #include "Error.hpp"
 
 using namespace cimg_library;
 
+template<typename I>
+class Fourier_Transform;
 /// Declaring the base class that contains the information related to an image.
 /// It mainly uses the Pixel class and make a matrix of it.
 /// It has two derived classes that are ImageBW and ImageRGB.
@@ -47,6 +49,8 @@ protected:
 public:
 	Image(const int& width, const int& height, const double& intensity=0, const std::string& name="undefined.jpg", const std::string& compute_distrib="no");
 	Image(const std::string& name, const std::string& compute_distrib="no");
+	Image(const Fourier_Transform< Image<P> >& fft ); // Only for BW
+	Image(){}
 
 	Image(const Image<P>& image_to_copy);
 
@@ -81,6 +85,8 @@ public:
 
 	Image<P> AddMirrorBoundary(const int& left, const int& right, const int& top, const int& bot) const;
 	Image<P> log_Rescale() const;
+	void shift_zero_to_center(); // To modify for RGB
+
 
 
 
@@ -94,8 +100,6 @@ public:
 	void Histogram(Image& histo, const std::string& provided_name="undefined")=0;
 	*/
 };
-
-
 
 
 #endif /* SRC_IMAGE_HPP_ */

@@ -1,26 +1,7 @@
-/*
- * Image.cpp
- *
- *  Created on: Dec 15, 2016
- *      Author: adrien
- */
-
-
-
 #include "Image.hpp"
+#include "Fourier_Transform.hpp"
 
-
-
-
-/*
- * ************************************************************************************
- * ************************************************************************************
- * ************************************************************************************
- * METHODS DECLARATION
- * ************************************************************************************
- * ************************************************************************************
- * ************************************************************************************
- */
+using namespace cimg_library;
 
 
 /// Constructor that creates an image with specified dimensions.
@@ -79,8 +60,6 @@ Image<P>::Image(const int& width, const int& height, const double& intensity /*=
 			throw ErrorDistribution("too_high_intensity");
 		}
 
-		// Computation of the distribution array
-		// Initialisation at 0
 		/* Seems to be dangerous to reserve
 		mdistribution.reserve(mspectra);
 		for(int c=0; c<mspectra; c++)
@@ -204,6 +183,7 @@ Image<P>::Image(const std::string& name, const std::string& compute_distrib /*="
 
 		// Computation of the distribution array
 		// Initialisation at 0
+
 		for(int c=0; c<mspectra; c++)
 		{
 			mdistribution.push_back(std::vector<int>(257,0));
@@ -252,6 +232,75 @@ Image<P>::Image(const Image<P>& image_to_copy)
 	mdistribution=image_to_copy.mdistribution;
 }
 
+
+/// Don't forget to comment
+std::vector<ComplexNumber> fft_1D_inv(const std::vector<ComplexNumber>& signal)
+{
+  int n = signal.size();
+  if (n == 1) return signal;
+  else {
+    std::vector<ComplexNumber> signaleven(n/2);
+    std::vector<ComplexNumber> signalodd(n/2);
+    for (size_t i = 0; i < n; i+=2) {
+      signaleven[i/2] = signal[i];
+      signalodd[i/2] = signal[i+1];
+    }
+    std::vector<ComplexNumber> Feven = fft_1D_inv(signaleven);
+    std::vector<ComplexNumber> Fodd = fft_1D_inv(signalodd);
+
+    std::vector<ComplexNumber> signalcombined(n,0);
+    for (size_t i = 0; i < n/2; i++) {
+      signalcombined[i] = (1.0/2)*(Feven[i] + ComplexNumber(cos(2*M_PI*i/n),sin(2*M_PI*i/n))*Fodd[i]);
+      signalcombined[i+n/2] = (1.0/2)*(Feven[i] - ComplexNumber(cos(2*M_PI*i/n),sin(2*M_PI*i/n))*Fodd[i]);
+    }
+    return signalcombined;
+  }
+}
+
+template <typename P>
+Image<P>::Image(const Fourier_Transform<Image<P > >& fft )
+{
+	int N1 = (fft.getrealPart()).Width();
+  int N2 = (fft.getrealPart()).Height();
+	Image<P> im = fft.getimPart();
+	Image<P> real  = fft.getrealPart();
+	im.shift_zero_to_center();
+	real.shift_zero_to_center();
+
+	Image<P> img(N1,N2,im.GetSpectra());
+
+	for (int c = 0; c < im.GetSpectra(); c++) {
+
+  	std::vector<ComplexNumber> qq(N1,0);
+  	std::vector< std::vector<ComplexNumber> > q(N2, qq);
+  	for (size_t i = 0; i < N1; i++) {
+    	for (size_t j = 0; j < N2; j++) {
+      	q[i][j] = ComplexNumber(real(i,j,c),im(i,j,c));
+    	}
+  	}
+
+  	for (int x = 0; x < N1; x++) {
+    	setColumn(q,fft_1D_inv(getColumn(q,x)),x);
+  	}
+
+
+  	for (int y = 0; y < N2; y++) {
+    	setRow(q, fft_1D_inv(getRow(q,y)),y);
+  	}
+
+
+  	for (size_t i = 0; i < N1; i++) {
+    	for (size_t j = 0; j < N2; j++) {
+        	img(i,j,c) = q[i][j].GetRealPart();
+      	//img(i,j) = q[i][j].GetImaginaryPart();
+    	}
+  	}
+
+  	//img.shift_zero_to_center();
+	}
+	(*this) = img;
+}
+
 /// Overloading of the () operator to be able to modify quickly the intensity
 template <typename P>
 double& Image<P>::operator()(const int& x, const int& y, const int& channel /*=0*/)
@@ -293,6 +342,7 @@ const double& Image<P>::operator()(const int& x, const int& y, const int& channe
 }
 
 
+
 /// Overloading the = operator to be able to copy an Image<P>
 template <typename P>
 Image<P> Image<P>::operator=(const Image<P>& image_to_copy)
@@ -305,7 +355,6 @@ Image<P> Image<P>::operator=(const Image<P>& image_to_copy)
 	mPmatrix=image_to_copy.mPmatrix;
 	mdistribution=image_to_copy.mdistribution;
 }
-
 
 
 /// Method that returns the image width
@@ -493,6 +542,7 @@ std::vector<int> Image<P>::GetDistribution(const int& channel /*=0*/) const
 	{
 		throw ErrorDistribution("not_computed");
 	}
+
 	// Controls that the channel is allowed
 	if (channel < 0 or channel >= mspectra)
 	{
@@ -622,10 +672,12 @@ void Image<P>::Rescale()
 template<typename P>
 Image<P> Image<P>::log_Rescale() const
 {
-	Image<P> img(Width(),Height());
-	for (size_t i = 0; i < Width(); i++) {
-		for (size_t j = 0; j < Height(); j++) {
-			img(i,j) = log((*this)(i,j));
+	Image<P> img(Width(),Height(),GetSpectra());
+	for (size_t c = 0; c < GetSpectra(); c++) {
+		for (size_t i = 0; i < Width(); i++) {
+			for (size_t j = 0; j < Height(); j++) {
+				img(i,j,c) = log((*this)(i,j,c));
+			}
 		}
 	}
 	img.Rescale();
@@ -633,7 +685,7 @@ Image<P> Image<P>::log_Rescale() const
 }
 
 
-/// Method that
+/// Method that returns 
 template <typename P>
 int Image<P>::GreatestPopDist(const int& channel /*=0*/) const
 {
@@ -668,7 +720,7 @@ int Image<P>::GreatestPopDist(const int& channel /*=0*/) const
 }
 
 
-
+/// Don't forget to comment
 template<typename P>
 Image<P> Image<P>::AddMirrorBoundary(const int& left, const int& right, const int& top, const int& bot) const
 {
@@ -713,9 +765,28 @@ Image<P> Image<P>::AddMirrorBoundary(const int& left, const int& right, const in
 }
 
 
+template<typename P>
+void Image<P>::shift_zero_to_center()
+{
+  int N1 = Width();
+  int N2 = Height();
+  Image<P> img_shifted(N1,N2);
+	for (size_t i = 0; i < N1; i++) {
+		for (size_t j = 0; j < N2; j++) {
+			img_shifted(((N1/2)+i)%N1,((N2/2)+j)%N2) = (*this)(i,j);
+		}
+	}
+
+  //I img_shifted(N1,N2,0);
+  for (size_t x = 0; x < N1 ; x++) {
+    for (size_t y = 0; y < N2; y++) {
+      (*this)(x,y) = img_shifted(x,y);
+    }
+  }
+}
+
 template class Image<PixelBW>;
 template class Image<PixelRGB>;
-
 
 
 

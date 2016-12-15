@@ -79,8 +79,11 @@ const double& PixelRGB::operator[](const int channel) const
 	}
 }
 
-
-
-
-
-
+// Overloading the = (assignment) operator
+PixelRGB& PixelRGB::operator=(const PixelRGB& pix)
+{
+   mRintensity = pix.mRintensity;
+	 mGintensity = pix.mGintensity;
+	 mBintensity = pix.mBintensity;
+   return *this;
+}
