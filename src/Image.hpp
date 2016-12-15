@@ -695,7 +695,6 @@ Image<P> Image<P>::AddMirrorBoundary(const int& left, const int& right, const in
 
   for (size_t x = 0; x < output.Width(); x++) {
     for (size_t y = 0; y < output.Height(); y++) {
-      //std ::cerr << "ok";
       int i;
       int j;
       if (x < left)
