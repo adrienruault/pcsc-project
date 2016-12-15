@@ -91,6 +91,3 @@ std::vector<std::vector <double> > hanning_low_pass(int width, int height, doubl
 	}
 	return tab;
 }
-
-
-

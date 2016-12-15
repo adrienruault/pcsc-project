@@ -10,7 +10,7 @@ ComplexNumber.hpp ComplexNumber.cpp Filter.hpp Filter.cpp)
 target_link_libraries(main_temp "-lX11")
 target_link_libraries(main_temp "-pthread")
 
-add_executable(user user.cpp Image.hpp PixelBW.hpp PixelBW.cpp PixelRGB.hpp PixelRGB.cpp
+add_executable(user user.cpp Image.hpp Image.cpp PixelBW.hpp PixelBW.cpp PixelRGB.hpp PixelRGB.cpp
 HistogramBW.hpp HistogramBW.cpp HistogramRGB.hpp HistogramRGB.cpp Fourier_Transform.hpp
 ComplexNumber.hpp ComplexNumber.cpp)
 target_link_libraries(user "-lX11")

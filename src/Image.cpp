@@ -603,7 +603,8 @@ Image<P> Image<P>::log_Rescale() const
 	for (size_t c = 0; c < GetSpectra(); c++) {
 		for (size_t i = 0; i < Width(); i++) {
 			for (size_t j = 0; j < Height(); j++) {
-				img(i,j,c) = log((*this)(i,j,c));
+				if ((*this)(i,j,c) < 1 ) {img(i,j,c) = 0;}
+				else {img(i,j,c) = log((*this)(i,j,c));}
 			}
 		}
 	}
