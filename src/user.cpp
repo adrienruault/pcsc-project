@@ -9,12 +9,11 @@
 #include <fstream>
 #include <cmath>
 
-#include "CImg.h"
+
 #include "Filter.hpp"
 #include "HistogramBW.hpp"
 #include "HistogramRGB.hpp"
 
-using namespace cimg_library;
 using namespace std;
 
 int main(int argc, char* argv[])
@@ -30,7 +29,9 @@ int main(int argc, char* argv[])
 	if (input!="quit")
 	{
 		image_input=input;
-		ifstream file(image_input);
+		//
+		const char* char_name = image_input.c_str();
+		ifstream file(char_name);
 		if (!file.good() and quit=="NO")
 		{
 			cout << "\nI can't find the file, could you try another name?";
