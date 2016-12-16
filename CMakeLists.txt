@@ -3,5 +3,6 @@ project(PCSC_project)
 
 add_subdirectory(src)
 add_subdirectory(trials)
+#add_subdirectory(tests)
 
 

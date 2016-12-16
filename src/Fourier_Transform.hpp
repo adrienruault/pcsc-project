@@ -79,8 +79,8 @@ std::vector<ComplexNumber> Fourier_Transform<I>::fft_1D(const std::vector<Comple
 /// a Fourier_Transform object.
 template<typename I>
 Fourier_Transform<I>::Fourier_Transform( const I& img)
-          :realPart(img.Width(),img.Height()), imPart(img.Width(),img.Height()),
-           modulus(img.Width(),img.Height()), argument(img.Width(),img.Height())
+          //:realPart(img.Width(),img.Height()), imPart(img.Width(),img.Height()),
+           //modulus(img.Width(),img.Height()), argument(img.Width(),img.Height())
 {
   int N1 = img.Width();
   int N2 = img.Height();
