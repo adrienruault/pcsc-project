@@ -203,18 +203,25 @@ int main(int argc, char* argv[])
       std::cout  << '\n';
     }*/
 
-	Image<PixelBW> imglena("../resources/lena.jpg");
-	//Fourier_Transform<Image<PixelBW> > lena_fourier(imglena);
+	Image<PixelRGB> imglena("../resources/rgb.jpg");
+	Fourier_Transform<Image<PixelRGB> > lena_fourier(imglena);
 	/*std::cout << imglena.GetSpectra() << std::endl;
 	std::cout << lena_fourier.getModulus()(255,255) << std::endl;
 	std::cout << lena_fourier.getModulus()(256,256) << std::endl;*/
 	//lena_fourier.Display();
-	Filter LP(512,512,std::string("LP"),40,60);
+	Filter LP(512,512,std::string("LP"),30,40);
 
-	//Fourier_Transform<Image<PixelBW> >  lena_filtered = LP.Apply(lena_fourier);
-	//std::cout << lena_filtered.MaxI() << '\n';
-	Image<PixelBW> filtered_lena = LP.Apply(imglena);
+	Fourier_Transform<Image<PixelRGB> >  lena_filtered = LP.Apply(lena_fourier);
+	lena_filtered.Display();
+	(Image<PixelRGB>(lena_filtered)).Display();
+
+	Image<PixelRGB> filtered_lena = LP.Apply(imglena);
+
+
 	filtered_lena.Display();
+	//std::cout << lena_filtered.MaxI() << '\n';
+	//Image<PixelBW> filtered_lena = HP.Apply(imglena);
+	//filtered_lena.Display();
 	//(Image<PixelBW>(lena_filtered)).Display();
 	//Image<PixelRGB> lenareconstructed(lena_fourier);
 	//lenareconstructed.Display();
