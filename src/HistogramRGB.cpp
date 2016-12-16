@@ -37,7 +37,7 @@ HistogramRGB::HistogramRGB(const Image<PixelRGB>& subject)
 	// Red part of histogram, lowest one
 	int pixels_to_fill;
 	int col;
-	mdistributionR distrib0=good_subject.ComputeDistribution(0);
+	mdistributionR=good_subject.ComputeDistribution(0);
 	for(int i=0; i<256; i++)
 	{
 		pixels_to_fill=(int)((double)mdistributionR[i]*ratio0);
