@@ -46,6 +46,8 @@ public:
 	*/
 
 	// Virtual deconstructor needed for purely abstract class
+
+	// Commented destructor because was seg-faulting
 	//virtual ~Pixel() {}
 };
 

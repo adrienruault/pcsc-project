@@ -203,8 +203,10 @@ int main(int argc, char* argv[])
       std::cout  << '\n';
     }*/
 
+
 	Image<PixelRGB> imglena("../resources/rgb.jpg");
 	Fourier_Transform<Image<PixelRGB> > lena_fourier(imglena);
+
 	/*std::cout << imglena.GetSpectra() << std::endl;
 	std::cout << lena_fourier.getModulus()(255,255) << std::endl;
 	std::cout << lena_fourier.getModulus()(256,256) << std::endl;*/
@@ -225,6 +227,7 @@ int main(int argc, char* argv[])
 	//(Image<PixelBW>(lena_filtered)).Display();
 	//Image<PixelRGB> lenareconstructed(lena_fourier);
 	//lenareconstructed.Display();
+
 
 
 
