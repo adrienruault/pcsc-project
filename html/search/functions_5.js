@@ -1,0 +1,16 @@
+var searchData=
+[
+  ['getargument',['getArgument',['../class_fourier___transform.html#a87b6bb0d2cef2809fc7244266374776e',1,'Fourier_Transform']]],
+  ['getcolumn',['getColumn',['../_complex_number_8cpp.html#a9e02c7b964652629d9a8a2293047685c',1,'getColumn(const std::vector&lt; std::vector&lt; ComplexNumber &gt; &gt; &amp;arr, int i):&#160;ComplexNumber.cpp'],['../_complex_number_8hpp.html#a9e02c7b964652629d9a8a2293047685c',1,'getColumn(const std::vector&lt; std::vector&lt; ComplexNumber &gt; &gt; &amp;arr, int i):&#160;ComplexNumber.cpp']]],
+  ['getdistribution',['GetDistribution',['../class_histogram_b_w.html#a58c8f75dc009addec265cabd3d78c309',1,'HistogramBW::GetDistribution()'],['../class_histogram_r_g_b.html#ac6a13af1054784a9254f799f79b3fdfd',1,'HistogramRGB::GetDistribution()']]],
+  ['getfilterft',['getFilterFT',['../class_filter.html#a53156b13e4fedc0b3d2115c9a5169931',1,'Filter']]],
+  ['geti',['GetI',['../class_pixel.html#a6f6c9eed855d1b93785e1fd37b3ccb2b',1,'Pixel::GetI()'],['../class_pixel_b_w.html#a6fcdba53cea94c6f099c5da442fdd346',1,'PixelBW::GetI()'],['../class_pixel_r_g_b.html#a82a526986cdce403181c35d43b9b6579',1,'PixelRGB::GetI()']]],
+  ['getimaginarypart',['GetImaginaryPart',['../class_complex_number.html#a4bd5227d9611529c06b59e4785c8abe3',1,'ComplexNumber::GetImaginaryPart()'],['../_complex_number_8cpp.html#a1894a5d3183932df63c34735b54f06cf',1,'GetImaginaryPart(ComplexNumber z):&#160;ComplexNumber.cpp'],['../_complex_number_8hpp.html#a1894a5d3183932df63c34735b54f06cf',1,'GetImaginaryPart(ComplexNumber z):&#160;ComplexNumber.cpp']]],
+  ['getimpart',['getimPart',['../class_fourier___transform.html#a0f2a8527e5f225b5f887dcf3710f0bef',1,'Fourier_Transform::getimPart() const '],['../class_fourier___transform.html#aa2e0dc102014266a53ff03f714275bb3',1,'Fourier_Transform::getimPart(int i, int j, int c=0) const ']]],
+  ['getmodulus',['getModulus',['../class_fourier___transform.html#aec563637e74996942a73c34929a7e259',1,'Fourier_Transform']]],
+  ['getname',['GetName',['../class_image.html#a0988051d0e9f189b011d8121e6114522',1,'Image']]],
+  ['getrealpart',['GetRealPart',['../class_complex_number.html#ad5007c8eed4512fd89c9d14498137369',1,'ComplexNumber::GetRealPart()'],['../class_fourier___transform.html#aca108d4ba93724974a90057858bc9797',1,'Fourier_Transform::getrealPart() const '],['../class_fourier___transform.html#a2e22c2961bd1072bf76f2e47b9885083',1,'Fourier_Transform::getrealPart(int i, int j, int c=0) const '],['../_complex_number_8cpp.html#aef867f608037fff9f2d5a1a82bd55bd5',1,'GetRealPart(ComplexNumber z):&#160;ComplexNumber.cpp'],['../_complex_number_8hpp.html#aef867f608037fff9f2d5a1a82bd55bd5',1,'GetRealPart(ComplexNumber z):&#160;ComplexNumber.cpp']]],
+  ['getrow',['getRow',['../_complex_number_8cpp.html#a41e25d95e44eff5b09dbe0002c83db7a',1,'getRow(const std::vector&lt; std::vector&lt; ComplexNumber &gt; &gt; &amp;arr, int i):&#160;ComplexNumber.cpp'],['../_complex_number_8hpp.html#a41e25d95e44eff5b09dbe0002c83db7a',1,'getRow(const std::vector&lt; std::vector&lt; ComplexNumber &gt; &gt; &amp;arr, int i):&#160;ComplexNumber.cpp']]],
+  ['getspectra',['GetSpectra',['../class_image.html#ac70a11701747526362b9315c60919ad5',1,'Image']]],
+  ['greatestpopdist',['GreatestPopDist',['../class_image.html#ac995b533225cab44fbc5a8db56e34fc0',1,'Image']]]
+];
