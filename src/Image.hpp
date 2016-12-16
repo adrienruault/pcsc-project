@@ -13,7 +13,7 @@
 #include <limits>
 #include <typeinfo>
 
-#include "CImg.h"
+#include "../CImg/CImg.h"
 #include "ComplexNumber.hpp"
 #include "PixelBW.hpp"
 #include "PixelRGB.hpp"
