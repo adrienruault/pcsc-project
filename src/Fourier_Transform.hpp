@@ -19,16 +19,17 @@ private:
 public:
   Fourier_Transform( const I& img);
   Fourier_Transform( const std::vector< std::vector<ComplexNumber > >&  vec);
+  Fourier_Transform( const std::vector<std::vector< std::vector<ComplexNumber > > >&  vec);
 
   void Display() const;
-  //I shift_zero_to_center(const I& img) const; // now in Image class
+  void Display(const std::string& save_name) const;
 
   I getArgument() const;
   I getModulus() const;
   I getimPart() const;
   I getrealPart() const;
-  double getimPart(int i, int j) const;
-  double getrealPart(int i, int j) const;
+  double getimPart(int i, int j, int c = 0) const;
+  double getrealPart(int i, int j, int c = 0) const;
 
   std::vector<ComplexNumber> fft_1D(const std::vector<ComplexNumber>& signal);
 
@@ -86,10 +87,11 @@ Fourier_Transform<I>::Fourier_Transform( const I& img)
   int N2 = img.Height();
   int c = img.GetSpectra();
 
-  realPart = I(N1,N2,c);
-  imPart = I(N1,N2,c);
-  modulus = I(N1,N2,c);
-  argument = I(N1,N2,c);
+
+  realPart = I(N1,N2);
+  imPart = I(N1,N2);
+  modulus = I(N1,N2);
+  argument = I(N1,N2);
 
   for (size_t b = 0; b < c; b++) {
 
@@ -119,11 +121,12 @@ Fourier_Transform<I>::Fourier_Transform( const I& img)
         argument(i,j,b) = q[i][j].CalculateArgument();
       }
     }
-    realPart.shift_zero_to_center();
-    imPart.shift_zero_to_center();
-    modulus.shift_zero_to_center();
-    argument.shift_zero_to_center();
+
   }
+  realPart.shift_zero_to_center();
+  imPart.shift_zero_to_center();
+  modulus.shift_zero_to_center();
+  argument.shift_zero_to_center();
 }
 
 /// Construct a Fourier_Transform of Image<PixelBW>
@@ -148,10 +151,30 @@ Fourier_Transform<I>::Fourier_Transform( const std::vector< std::vector<ComplexN
       argument(x,y) = vec[x][y].CalculateArgument();
     }
   }
-  /*realPart.shift_zero_to_center();
-  imPart.shift_zero_to_center();
-  modulus.shift_zero_to_center();
-  argument.shift_zero_to_center();*/
+}
+
+/// Construct a Fourier_Transform of Image<PixelRGB>
+/// Usefull for the Filter class
+template<typename I>
+Fourier_Transform<I>::Fourier_Transform( const std::vector<std::vector< std::vector<ComplexNumber > > >&  vec)
+{
+  int N1 = vec.size();
+  int N2 = vec[0].size();
+  int nc = vec[0][0].size();
+  argument = Image<PixelRGB>(N1,N2);
+  modulus = Image<PixelRGB>(N1,N2);
+  realPart = Image<PixelRGB>(N1,N2);
+  imPart = Image<PixelRGB>(N1,N2);
+  for (size_t c = 0; c < nc; c++) {
+    for (int x = 0; x < N1; x++) {
+      for (int y = 0; y < N2; y++) {
+        realPart(x,y,c) = vec[x][y][c].GetRealPart();
+        imPart(x,y,c) = vec[x][y][c].GetImaginaryPart();
+        modulus(x,y,c) = vec[x][y][c].CalculateModulus();
+        argument(x,y,c) = vec[x][y][c].CalculateArgument();
+      }
+    }
+  }
 }
 
 
@@ -161,6 +184,12 @@ template<typename I>
 void Fourier_Transform<I>::Display() const
 {
   (modulus.log_Rescale()).Display();
+}
+
+template<typename I>
+void Fourier_Transform<I>::Display(const std::string& save_name) const
+{
+  (modulus.log_Rescale()).Display(save_name);
 }
 
 template<typename I>
@@ -182,15 +211,15 @@ I Fourier_Transform<I>::getimPart() const
 }
 
 template<typename I>
-double Fourier_Transform<I>::getimPart(int i, int j) const
+double Fourier_Transform<I>::getimPart(int i, int j, int c) const
 {
-  return imPart(i,j);
+  return imPart(i,j,c);
 }
 
 template<typename I>
-double Fourier_Transform<I>::getrealPart(int i, int j) const
+double Fourier_Transform<I>::getrealPart(int i, int j, int c) const
 {
-  return realPart(i,j);
+  return realPart(i,j,c);
 }
 
 

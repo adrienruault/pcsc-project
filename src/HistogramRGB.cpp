@@ -107,4 +107,3 @@ std::vector<int> HistogramRGB::GetDistribution(const int& channel) const
 		return mdistributionB;
 	}
 }
-

@@ -47,11 +47,13 @@ protected:
 	//std::vector<std::vector<int> > mdistribution;
 
 public:
+
 	Image(const int& width, const int& height, const double& intensity=0, const std::string& name="undefined.jpg");
 	Image(const std::string& name);
-	Image(const Fourier_Transform< Image<P> >& fft ); // Only for BW
+	Image(const Fourier_Transform< Image<P> >& fft );
 	Image(const std::vector<std::vector<double> > intensity_array);
 	Image(){mheight=0; mwidth=0; mspectra=0;};
+
 
 	Image(const Image<P>& image_to_copy);
 

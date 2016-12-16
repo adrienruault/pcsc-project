@@ -131,6 +131,7 @@ std::vector<std::vector <double> > hanning_low_pass(int width, int height, doubl
 
 
 
+
 std::vector<std::vector <double> > hanning_high_pass(int width, int height, double cut_off, double sharpness)
 {
 	std::vector<std::vector<double>> tab;
@@ -222,4 +223,3 @@ std::vector<std::vector <double> > hanning_band_pass(int width, int height, doub
 	}
 	return tab;
 }
-

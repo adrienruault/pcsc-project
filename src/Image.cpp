@@ -51,51 +51,6 @@ Image<P>::Image(const int& width, const int& height, const double& intensity /*=
 			}
 		}
 	}
-
-	/*
-	if (compute_distrib=="yes")
-	{
-		// This exception use is only available when creating an image by our own
-		if (intensity>255)
-		{
-			throw ErrorDistribution("too_high_intensity");
-		}
-
-		// Computation of the distribution array
-		// Initialisation at 0
-		for(int c=0; c<mspectra; c++)
-		{
-			mdistribution.push_back(std::vector<int>(257,0));
-		}
-
-		// Filling of mdistribution
-		for(int i=0; i<mwidth; i++)
-		{
-			for(int j=0; j<mheight; j++)
-			{
-				for(int c=0; c<mspectra; c++)
-				{
-					int k=mPmatrix[i][j][c];
-					mdistribution[c][k]+=1;
-				}
-			}
-		}
-
-		// Last element set to 1 signals that mdistribution[c] is up-to-date
-		for(int c=0; c<mspectra; c++)
-		{
-			mdistribution[c][256]=1;
-		}
-	}
-	else
-	{
-		//mdistribution.reserve(mspectra);
-		for(int c=0; c<mspectra; c++)
-		{
-			mdistribution.push_back(std::vector<int>(1,0));
-		}
-	}
-	*/
 }
 
 
@@ -449,6 +404,7 @@ void Image<P>::Display() const
 	{
 		disp_img.wait();
 	}
+	img = CImg<double>();
 }
 
 
@@ -740,7 +696,8 @@ Image<P> Image<P>::log_Rescale() const
 	for (size_t c = 0; c < GetSpectra(); c++) {
 		for (size_t i = 0; i < Width(); i++) {
 			for (size_t j = 0; j < Height(); j++) {
-				img(i,j,c) = log((*this)(i,j,c));
+				if ((*this)(i,j,c) < 1 ) {img(i,j,c) = 0;}
+				else {img(i,j,c) = log((*this)(i,j,c));}
 			}
 		}
 	}
@@ -827,7 +784,9 @@ Image<P> Image<P>::AddMirrorBoundary(const int& left, const int& right, const in
       {
     	  j = y-top;
       }
-      output(x,y) = (*this)(i,j,0);
+			for (size_t c = 0; c < GetSpectra(); c++) {
+      	output(x,y,c) = (*this)(i,j,c);
+			}
       //if (x<100 and y<50) output(x,y) = 0;
     }
   }
@@ -840,27 +799,20 @@ void Image<P>::shift_zero_to_center()
 {
   int N1 = Width();
   int N2 = Height();
+	int nc = GetSpectra();
   Image<P> img_shifted(N1,N2);
-	for (size_t i = 0; i < N1; i++) {
-		for (size_t j = 0; j < N2; j++) {
-			img_shifted(((N1/2)+i)%N1,((N2/2)+j)%N2) = (*this)(i,j);
+	for (size_t c = 0; c < nc; c++) {
+		for (size_t i = 0; i < N1; i++) {
+			for (size_t j = 0; j < N2; j++) {
+				img_shifted(((N1/2)+i)%N1,((N2/2)+j)%N2,c) = (*this)(i,j,c);
+			}
 		}
 	}
 
-  //I img_shifted(N1,N2,0);
-  for (size_t x = 0; x < N1 ; x++)
-  {
-    for (size_t y = 0; y < N2; y++)
-    {
-      (*this)(x,y) = img_shifted(x,y);
-    }
-  }
+
+	(*this) = img_shifted;
+
 }
 
 template class Image<PixelBW>;
 template class Image<PixelRGB>;
-
-
-
-
-
