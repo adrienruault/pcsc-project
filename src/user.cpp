@@ -34,6 +34,7 @@ int main(int argc, char* argv[])
 			cout << "\nI can't find the file, could you try another name?";
 			cout << "\nOr just quit by typing quit!\n";
 			cout << "\n>>";
+			cin.clear();
 			cin >> input;
 			if (input != "quit")
 			{

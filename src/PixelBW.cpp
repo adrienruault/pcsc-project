@@ -86,10 +86,3 @@ void PixelBW::ChangeI(const double new_intensity, const int channel /*set by def
 
 	mintensity=new_intensity;
 }
-
-// Overloading the = (assignment) operator
-PixelBW& PixelBW::operator=(const PixelBW& pix)
-{
-   mintensity = pix.mintensity;
-   return *this;
-}

@@ -49,7 +49,7 @@ protected:
 public:
 	Image(const int& width, const int& height, const double& intensity=0, const std::string& name="undefined.jpg", const std::string& compute_distrib="no");
 	Image(const std::string& name, const std::string& compute_distrib="no");
-	Image(const Fourier_Transform< Image<P> >& fft ); // Only for BW
+	Image(const Fourier_Transform< Image<P> >& fft );
 	Image(){}
 
 	Image(const Image<P>& image_to_copy);
@@ -77,6 +77,7 @@ public:
 	// This rescale just multiply all pixel intensities by a factor computed such that
 	// the highest intensity is fit to 255
 	void Rescale();
+	void CreateDistribution();
 	std::vector<int> GetDistribution(const int& channel=0) const;
 	void UpdateDistribution(const int& channel=0);
 	int GreatestPopDist(const int& channel=0) const;
@@ -98,7 +99,6 @@ public:
 	void Histogram(Image& histo, const std::string& provided_name="undefined")=0;
 	*/
 };
-
 
 
 #endif /* SRC_IMAGE_HPP_ */

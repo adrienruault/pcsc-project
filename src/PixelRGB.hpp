@@ -21,7 +21,6 @@ private:
 public:
 	PixelRGB();
 	PixelRGB(const PixelRGB& copiedPixel);
-	PixelRGB& operator=(const PixelRGB& pix);
 
 	/// Overloading of operator [] to get and set PixelRGB intensities
 	// For default values see: http://stackoverflow.com/questions/12139786/good-pratice-default-arguments-for-pure-virtual-method

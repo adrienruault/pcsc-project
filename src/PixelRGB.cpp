@@ -78,12 +78,3 @@ const double& PixelRGB::operator[](const int channel) const
 		throw ErrorChannel(mspectra);
 	}
 }
-
-// Overloading the = (assignment) operator
-PixelRGB& PixelRGB::operator=(const PixelRGB& pix)
-{
-   mRintensity = pix.mRintensity;
-	 mGintensity = pix.mGintensity;
-	 mBintensity = pix.mBintensity;
-   return *this;
-}

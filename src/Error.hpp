@@ -181,7 +181,7 @@ public:
 		}
 		else if (type=="not_computed")
 		{
-			mphrase="ERROR: trying to use distribution which is not computed\n";
+			mphrase="ERROR: trying to use distribution which is not computed. Call CreateDistribution to compute it.\n";
 		}
 		else if (type=="out-dated")
 		{

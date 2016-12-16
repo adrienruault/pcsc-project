@@ -1,15 +1,15 @@
-
 #include "Image.hpp"
 #include "Fourier_Transform.hpp"
 
 using namespace cimg_library;
+
 
 /// Constructor that creates an image with specified dimensions.
 /// It initializes the intensity of every pixels to the specified intensity or to 0 if
 /// not provided.
 /// It names the image with the provided name.
 template<typename P>
-Image<P>::Image(const int& width, const int& height, const double& intensity , const std::string& name , const std::string& compute_distrib )
+Image<P>::Image(const int& width, const int& height, const double& intensity /*=0*/, const std::string& name /*="undefined.jpg"*/, const std::string& compute_distrib /*="no"*/)
 {
 	if (typeid(P)==typeid(PixelBW))
 	{
@@ -51,22 +51,24 @@ Image<P>::Image(const int& width, const int& height, const double& intensity , c
 			}
 		}
 	}
-
 	if (compute_distrib=="yes")
 	{
+		// This exception use is only available when creating an image by our own
 		if (intensity>255)
 		{
-			throw ErrorIntensity();
+			throw ErrorDistribution("too_high_intensity");
 		}
 
-		// Computation of the distribution array
-		// Initialisation at 0
+		/* Seems to be dangerous to reserve
 		mdistribution.reserve(mspectra);
 		for(int c=0; c<mspectra; c++)
 		{
 			mdistribution[c].reserve(257);
 		}
+		*/
 
+		// Computation of the distribution array
+		// Initialisation at 0
 		for(int c=0; c<mspectra; c++)
 		{
 			mdistribution.push_back(std::vector<int>(257,0));
@@ -93,7 +95,7 @@ Image<P>::Image(const int& width, const int& height, const double& intensity , c
 	}
 	else
 	{
-		mdistribution.reserve(mspectra);
+		//mdistribution.reserve(mspectra);
 		for(int c=0; c<mspectra; c++)
 		{
 			mdistribution.push_back(std::vector<int>(1,0));
@@ -170,13 +172,16 @@ Image<P>::Image(const std::string& name, const std::string& compute_distrib /*="
 
 	if (compute_distrib=="yes")
 	{
-		// Computation of the distribution array
-		// Initialisation at 0
+		/* Seems to be dangerous to reserve
 		mdistribution.reserve(mspectra);
 		for(int c=0; c<mspectra; c++)
 		{
 			mdistribution[c].reserve(257);
 		}
+		*/
+
+		// Computation of the distribution array
+		// Initialisation at 0
 
 		for(int c=0; c<mspectra; c++)
 		{
@@ -204,7 +209,7 @@ Image<P>::Image(const std::string& name, const std::string& compute_distrib /*="
 	}
 	else
 	{
-		mdistribution.reserve(mspectra);
+		//mdistribution.reserve(mspectra);
 		for(int c=0; c<mspectra; c++)
 		{
 			mdistribution.push_back(std::vector<int>(1,0));
@@ -226,6 +231,8 @@ Image<P>::Image(const Image<P>& image_to_copy)
 	mdistribution=image_to_copy.mdistribution;
 }
 
+
+/// Don't forget to comment
 std::vector<ComplexNumber> fft_1D_inv(const std::vector<ComplexNumber>& signal)
 {
   int n = signal.size();
@@ -293,7 +300,7 @@ Image<P>::Image(const Fourier_Transform<Image<P > >& fft )
 	(*this) = img;
 }
 
-/// Overloading of the () operator to be able to get and modify quickly the intensity
+/// Overloading of the () operator to be able to modify quickly the intensity
 template <typename P>
 double& Image<P>::operator()(const int& x, const int& y, const int& channel /*=0*/)
 {
@@ -319,6 +326,7 @@ double& Image<P>::operator()(const int& x, const int& y, const int& channel /*=0
 }
 
 
+/// Overloading of the () operator to be able to get quickly the intensity
 template <typename P>
 const double& Image<P>::operator()(const int& x, const int& y, const int& channel /*=0*/) const
 {
@@ -331,7 +339,6 @@ const double& Image<P>::operator()(const int& x, const int& y, const int& channe
 		throw ErrorDimensions(x,y);
 	}
 }
-
 
 
 /// Method that returns the image width
@@ -402,6 +409,7 @@ void Image<P>::Display() const
 	{
 		disp_img.wait();
 	}
+	img = CImg<double>();
 }
 
 
@@ -473,10 +481,53 @@ void Image<P>::SetI(const double& new_intensity)
 }
 
 
-/// Method that sends
+/// Method that creates a distribution if not computed
+template <typename P>
+void Image<P>::CreateDistribution()
+{
+	if(mdistribution[0].size() != 257)
+	{
+		throw ErrorDistribution("not_computed");
+	}
+
+	// Reassign the mdistribution vector so that it has dimension 3x257 and 0 value
+	std::vector<std::vector<int> > new_distrib;
+	for(int c=0; c<mspectra; c++)
+	{
+		new_distrib.push_back(std::vector<int>(257,0));
+	}
+	mdistribution=new_distrib;
+
+	// Calculation of distribution
+	for(int i=0; i<mwidth; i++)
+	{
+		for(int j=0; j<mheight; j++)
+		{
+			for(int c=0; c<mspectra; c++)
+			{
+				int k=mPmatrix[i][j][c];
+				mdistribution[c][k]+=1;
+			}
+		}
+	}
+
+	// Last element set to 1 signals that mdistribution[c] is up-to-date
+	for(int c=0; c<mspectra; c++)
+	{
+		mdistribution[c][256]=1;
+	}
+}
+
+/// Method that sends the distribution of the channel provided in argument
 template <typename P>
 std::vector<int> Image<P>::GetDistribution(const int& channel /*=0*/) const
 {
+	// Controls if the distribution is computed
+	if (mdistribution[channel].size() != 257)
+	{
+		throw ErrorDistribution("not_computed");
+	}
+
 	// Controls that the channel is allowed
 	if (channel < 0 or channel >= mspectra)
 	{
@@ -491,7 +542,8 @@ std::vector<int> Image<P>::GetDistribution(const int& channel /*=0*/) const
 }
 
 /// Method that updates the distribution array for a particular channel provided in
-/// argument
+/// argument.
+/// If the distribution is not computed, call CreateDistribution() to compute it
 template<typename P>
 void Image<P>::UpdateDistribution(const int& channel /*=0*/)
 {
@@ -500,9 +552,15 @@ void Image<P>::UpdateDistribution(const int& channel /*=0*/)
 		throw ErrorChannel(mspectra);
 	}
 
+	//MaxI() for which channel?
 	if(Image<P>::MaxI()>255)
 	{
-		Image<P>::Rescale();
+		throw ErrorDistribution("too_high_intensity");
+	}
+
+	if (mdistribution[channel].size() !=257)
+	{
+		throw ErrorDistribution("not_computed");
 	}
 
 	// Resetting mdistribution to 0
@@ -575,7 +633,7 @@ void Image<P>::Rescale()
 {
 	double max_intensity = Image<P>::MaxI();
 	double min_intensity = Image<P>::MinI();
-	double factor=(double)255/(max_intensity);
+	double factor=(double)255/(max_intensity-min_intensity);
 
 	int relay;
 	for(int i=0; i<mwidth; i++)
@@ -584,7 +642,7 @@ void Image<P>::Rescale()
 		{
 			for(int c=0; c<mspectra; c++)
 			{
-				relay=mPmatrix[i][j][c]*factor;
+				relay=(mPmatrix[i][j][c]-min_intensity)*factor;
 				mPmatrix[i][j][c]=relay;
 			}
 		}
@@ -612,7 +670,8 @@ Image<P> Image<P>::log_Rescale() const
 	return img;
 }
 
-/// Method that
+
+/// Method that returns
 template <typename P>
 int Image<P>::GreatestPopDist(const int& channel /*=0*/) const
 {
@@ -647,7 +706,7 @@ int Image<P>::GreatestPopDist(const int& channel /*=0*/) const
 }
 
 
-
+/// Don't forget to comment
 template<typename P>
 Image<P> Image<P>::AddMirrorBoundary(const int& left, const int& right, const int& top, const int& bot) const
 {
@@ -658,7 +717,6 @@ Image<P> Image<P>::AddMirrorBoundary(const int& left, const int& right, const in
 
   for (size_t x = 0; x < output.Width(); x++) {
     for (size_t y = 0; y < output.Height(); y++) {
-      //std ::cerr << "ok";
       int i;
       int j;
       if (x < left)
@@ -685,31 +743,33 @@ Image<P> Image<P>::AddMirrorBoundary(const int& left, const int& right, const in
       {
     	  j = y-top;
       }
-      output(x,y) = (*this)(i,j,0);
+			for (size_t c = 0; c < GetSpectra(); c++) {
+      	output(x,y,c) = (*this)(i,j,c);
+			}
       //if (x<100 and y<50) output(x,y) = 0;
     }
   }
   return output;
 }
 
+
 template<typename P>
 void Image<P>::shift_zero_to_center()
 {
   int N1 = Width();
   int N2 = Height();
+	int nc = GetSpectra();
   Image<P> img_shifted(N1,N2);
-	for (size_t i = 0; i < N1; i++) {
-		for (size_t j = 0; j < N2; j++) {
-			img_shifted(((N1/2)+i)%N1,((N2/2)+j)%N2) = (*this)(i,j);
+	for (size_t c = 0; c < nc; c++) {
+		for (size_t i = 0; i < N1; i++) {
+			for (size_t j = 0; j < N2; j++) {
+				img_shifted(((N1/2)+i)%N1,((N2/2)+j)%N2,c) = (*this)(i,j,c);
+			}
 		}
 	}
 
   //I img_shifted(N1,N2,0);
-  for (size_t x = 0; x < N1 ; x++) {
-    for (size_t y = 0; y < N2; y++) {
-      (*this)(x,y) = img_shifted(x,y);
-    }
-  }
+	(*this) = img_shifted;
 }
 
 template class Image<PixelBW>;
