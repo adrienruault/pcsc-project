@@ -14,16 +14,23 @@
 class PixelRGB : public Pixel
 {
 private:
+	/// Contains Red intensity
 	double mRintensity;
+	/// Contains Green intensity
 	double mGintensity;
+	/// Contains Blue intensity
 	double mBintensity;
 
 public:
+	/// Overriding the default constructor
+	/// Intensity for the 3 colors are set to 0.0 by default
 	PixelRGB();
 	PixelRGB(const PixelRGB& copiedPixel);
 
-	/// Overloading of operator [] to get and set PixelRGB intensities
-	// For default values see: http://stackoverflow.com/questions/12139786/good-pratice-default-arguments-for-pure-virtual-method
+	/// Overloading of the [] operator to set and get PixelRGB intensities
+	/// Potential arguments with their returns: 0 -> Red intensity
+	///											1 -> Green intensity
+	/// 										2 -> Blue intensityd
 	double& operator[] (const int channel);
 	const double& operator[] (const int channel) const;
 
@@ -31,6 +38,7 @@ public:
 	{return 0;}
 	void ChangeI(const double new_intensity, const int channel=0)
 	{}
+	
 
 };
 

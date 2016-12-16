@@ -20,35 +20,16 @@ protected:
 	int mspectra;
 
 public:
-	// Virtual overloading of [] allowing to set and get the intensity of a pixel
-	// Some care has to be taken when defining default values for purely virtual methods
+	/// Virtual overloading of [] allowing to set and get the intensity of a pixel
+	/// Some care has to be taken when defining default values for purely virtual methods
 	virtual double& operator[] (const int channel) = 0;
 	virtual const double& operator[] (const int channel) const=0;
 
-	// Declaration of two virtual functions
-	// that allow to get and change the pixel intensities
+	/// Declaration of two virtual functions
+	/// that allow to get and change the pixel intensities
+	/// Since we have the brackets, these methods are no longer essentials.
 	virtual double GetI(const int channel=0) const = 0;
 	virtual void ChangeI(const double new_intensity, const int channel=0) = 0;
-
-	/* Do we need constructors in purely abstract class?
-	// Overriding the default constructor
-	Pixel()
-	{
-		mformat="undefined";
-	}
-	*/
-	/*
-	// Overriding the copy constructor
-	Pixel(const Pixel& copiedPixel)
-	{
-		mformat=copiedPixel.mformat;
-	}
-	*/
-
-	// Virtual deconstructor needed for purely abstract class
-
-	// Commented destructor because was seg-faulting
-	//virtual ~Pixel() {}
 };
 
 

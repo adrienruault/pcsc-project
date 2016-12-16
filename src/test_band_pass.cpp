@@ -33,8 +33,11 @@ int main(int argc, char* argv[])
   Image<PixelBW> BPimg2(BP.Apply(img));
   BPimg2.Display("lena filtered directly in the space domain with a convolution");
   /// Here we save the two filtered image so that we can compare them.
-  BPimg.Save("../resources/lenaBPinfourier.jpg");
-  BPimg2.Save("../resources/lenaBPinspace.jpg");
+  /// To be sure of the result of the display after saving,
+  /// which will not done with ImageMagic, we use our method rescale
+  /// to put the values of the pixels between 0 and 255.
+  (BPimg.RescaledCopy()).Save("../resources/lenaBPinfourier.jpg");
+  (BPimg2.RescaledCopy()).Save("../resources/lenaBPinspace.jpg");
 
 
   return 0;

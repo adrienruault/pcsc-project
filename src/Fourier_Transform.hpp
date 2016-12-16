@@ -11,26 +11,55 @@ template<typename I>
 class Fourier_Transform
 {
 private:
+  /// 4 images of type Image<PixelBW> or Image<PixelRGB>
+  /// to describe the fourier transform of an image of the same type.
   I argument;
   I modulus;
   I imPart;
   I realPart;
 
 public:
+  /// Compute the Fourier Transform (using fft algorithm) of an image BW or RGB and constructs
+  /// a Fourier_Transform object.
   Fourier_Transform( const I& img);
+
+  /// Construct a Fourier_Transform of Image<PixelBW>
+  /// Usefull for the Filter class
   Fourier_Transform( const std::vector< std::vector<ComplexNumber > >&  vec);
+
+  /// Construct a Fourier_Transform of Image<PixelRGB>
+  /// Usefull for the Filter class
   Fourier_Transform( const std::vector<std::vector< std::vector<ComplexNumber > > >&  vec);
 
+  /// This method displays the modulus of the Fourier_Transform, with a log scale.
+  /// By default, we display the modulus of the fourier transform.
+  /// One can use for example fft.getArgument().Display()
+  /// to display the argument instead of the modulus.
   void Display() const;
+
+  /// Displays the modulus of the fourier transform giving a title to the
+  /// displayed image, which is passed as a string.
   void Display(const std::string& save_name) const;
 
+  /// 4 getters to get each of the 4 image attributes of the class
+  /// Fourier_Transform.
   I getArgument() const;
   I getModulus() const;
   I getimPart() const;
   I getrealPart() const;
+
+  /// Allows to get the intensity of the pixel at the coordinates i,j,
+  /// channel c in imPart or realPart image.
+  /// This is much easier to write and much faster than
+  /// fft.getimPart()(i,j,c) or fft.getrealPart()(i,j,c)
   double getimPart(int i, int j, int c = 0) const;
   double getrealPart(int i, int j, int c = 0) const;
 
+
+  /// This function is the algorithm for the fft in one dimension.
+  /// It is called by the constructor of the Fourier_Transform class
+  /// to compute the fourier transform of both the rows and the columns
+  /// of the image passed as argument of the constructor.
   std::vector<ComplexNumber> fft_1D(const std::vector<ComplexNumber>& signal);
 
 
@@ -42,10 +71,7 @@ I Fourier_Transform<I>::getrealPart() const
   return realPart;
 }
 
-/// This function is the algorithm for the fft in one dimension.
-/// It is called by the constructor of the Fourier_Transform class
-/// to compute the fourier transform of both the rows and the columns
-/// of the image passed as argument of the constructor.
+
 template<typename I>
 std::vector<ComplexNumber> Fourier_Transform<I>::fft_1D(const std::vector<ComplexNumber>& signal)
 {
@@ -74,10 +100,6 @@ std::vector<ComplexNumber> Fourier_Transform<I>::fft_1D(const std::vector<Comple
 }
 
 
-
-
-/// Compute the Fourier Transform of an image BW or RGB and constructs
-/// a Fourier_Transform object.
 template<typename I>
 Fourier_Transform<I>::Fourier_Transform( const I& img)
           //:realPart(img.Width(),img.Height()), imPart(img.Width(),img.Height()),
@@ -129,13 +151,10 @@ Fourier_Transform<I>::Fourier_Transform( const I& img)
   argument.shift_zero_to_center();
 }
 
-/// Construct a Fourier_Transform of Image<PixelBW>
-/// Usefull for the Filter class
+
 template<typename I>
 Fourier_Transform<I>::Fourier_Transform( const std::vector< std::vector<ComplexNumber > >&  vec)
 {
-
-  // TODO : Gestion d'erreur. Useful constructor ?
 
   int N1 = vec.size();
   int N2 = vec[0].size();
@@ -153,8 +172,7 @@ Fourier_Transform<I>::Fourier_Transform( const std::vector< std::vector<ComplexN
   }
 }
 
-/// Construct a Fourier_Transform of Image<PixelRGB>
-/// Usefull for the Filter class
+
 template<typename I>
 Fourier_Transform<I>::Fourier_Transform( const std::vector<std::vector< std::vector<ComplexNumber > > >&  vec)
 {
@@ -178,8 +196,7 @@ Fourier_Transform<I>::Fourier_Transform( const std::vector<std::vector< std::vec
 }
 
 
-/// This method displays the modulus of the Fourier_Transform, with a log scale,
-/// and the zero frequence centered.
+
 template<typename I>
 void Fourier_Transform<I>::Display() const
 {

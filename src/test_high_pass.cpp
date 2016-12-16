@@ -31,8 +31,11 @@ int main(int argc, char* argv[])
   Image<PixelBW> HPimg2(HP.Apply(img));
   HPimg2.Display("lena filtered directly in the space domain with a convolution");
   /// Here we save the two filtered image so that we can compare them.
-  HPimg.Save("../resources/lenaHPinfourier.jpg");
-  HPimg2.Save("../resources/lenaHPinspace.jpg");
+  /// To be sure of the result of the display after saving,
+  /// which will not done with ImageMagic, we use our method rescale
+  /// to put the values of the pixels between 0 and 255.
+  (HPimg.RescaledCopy()).Save("../resources/lenaHPinfourier.jpg");
+  (HPimg2.RescaledCopy()).Save("../resources/lenaHPinspace.jpg");
 
 
   return 0;

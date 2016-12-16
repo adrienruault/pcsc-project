@@ -4,10 +4,6 @@
 using namespace cimg_library;
 
 
-/// Constructor that creates an image with specified dimensions.
-/// It initializes the intensity of every pixels to the specified intensity or to 0 if
-/// not provided.
-/// It names the image with the provided name.
 template<typename P>
 Image<P>::Image(const int& width, const int& height, const double& intensity /*=0*/, const std::string& name /*="undefined.jpg"*/)
 {
@@ -54,7 +50,6 @@ Image<P>::Image(const int& width, const int& height, const double& intensity /*=
 }
 
 
-/// Constructor that...
 template <typename P>
 Image<P>::Image(const std::string& name)
 {
@@ -161,7 +156,6 @@ Image<P>::Image(const std::string& name)
 }
 
 
-/// Constructor that takes as input a vector of vector of double to build an image
 template <typename P>
 Image<P>::Image(const std::vector<std::vector<double> > intensity_array)
 {
@@ -211,7 +205,7 @@ Image<P>::Image(const std::vector<std::vector<double> > intensity_array)
 }
 
 
-/// Overriding the copy constructor
+
 template <typename P>
 Image<P>::Image(const Image<P>& image_to_copy)
 {
@@ -225,7 +219,7 @@ Image<P>::Image(const Image<P>& image_to_copy)
 }
 
 
-/// Don't forget to comment
+
 std::vector<ComplexNumber> fft_1D_inv(const std::vector<ComplexNumber>& signal)
 {
   int n = signal.size();
@@ -293,7 +287,7 @@ Image<P>::Image(const Fourier_Transform<Image<P > >& fft )
 	(*this) = img;
 }
 
-/// Overloading of the () operator to be able to modify quickly the intensity
+
 template <typename P>
 double& Image<P>::operator()(const int& x, const int& y, const int& channel /*=0*/)
 {
@@ -321,7 +315,7 @@ double& Image<P>::operator()(const int& x, const int& y, const int& channel /*=0
 }
 
 
-/// Overloading of the () operator to be able to get quickly the intensity
+
 template <typename P>
 const double& Image<P>::operator()(const int& x, const int& y, const int& channel /*=0*/) const
 {
@@ -336,7 +330,7 @@ const double& Image<P>::operator()(const int& x, const int& y, const int& channe
 }
 
 
-/// Method that returns the image width
+
 template<typename P>
 int Image<P>::Width() const
 {
@@ -344,7 +338,7 @@ int Image<P>::Width() const
 }
 
 
-/// Method that returns the image height
+
 template<typename P>
 int Image<P>::Height() const
 {
@@ -352,7 +346,7 @@ int Image<P>::Height() const
 }
 
 
-/// Method that changes the name of Image
+
 template<typename P>
 void Image<P>::SetName(const std::string& new_name)
 {
@@ -366,7 +360,6 @@ std::string Image<P>::GetName() const
 }
 
 
-/// Method that returns the number of channels of the image
 template<typename P>
 int Image<P>::GetSpectra() const
 {
@@ -408,7 +401,6 @@ void Image<P>::Display() const
 }
 
 
-/// Method that displays the image under the name provided in argument
 template<typename P>
 void Image<P>::Display(const std::string& save_name) const
 {
@@ -439,8 +431,6 @@ void Image<P>::Display(const std::string& save_name) const
 }
 
 
-/// Method that saves the image with the provided name
-/// The facilities provided by the CImg library are used here
 template<typename P>
 void Image<P>::Save() const
 {
@@ -488,7 +478,6 @@ void Image<P>::Save(const std::string& save_name) const
 }
 
 
-/// Set the intensity of every pixel at the one provided in argument for every channel
 template<typename P>
 void Image<P>::SetI(const double& new_intensity)
 {
@@ -509,7 +498,6 @@ void Image<P>::SetI(const double& new_intensity)
 }
 
 
-/// Method that computes the distribution for the channel specified in argument
 template <typename P>
 std::vector<int> Image<P>::ComputeDistribution(const int& channel /*=0*/) const
 {
@@ -611,7 +599,6 @@ void Image<P>::UpdateDistribution(const int& channel */ /*=0*/ /*)
 */
 
 
-/// Methods that output the maximum pixel intensity of the image over all possible channels
 template<typename P>
 double Image<P>::MaxI() const
 {
@@ -633,7 +620,6 @@ double Image<P>::MaxI() const
 }
 
 
-/// Methods that output the minimum pixel intensity of the image over all possible channels
 template<typename P>
 double Image<P>::MinI() const
 {
@@ -654,7 +640,7 @@ double Image<P>::MinI() const
 	return min;
 }
 
-/// Methods that rescale the pixel intensity so that the max value is 255
+
 template<typename P>
 void Image<P>::Rescale()
 {
@@ -677,8 +663,7 @@ void Image<P>::Rescale()
 }
 
 
-/// Method that returns an image that is rescaled so that the minimum intensity is 0
-/// and the maximum intensity is 255
+
 template<typename P>
 Image<P> Image<P>::RescaledCopy() const
 {
@@ -706,8 +691,7 @@ Image<P> Image<P>::log_Rescale() const
 }
 
 
-/// Method that returns the greatest number of pixels associated to the same intensity
-/// for the channel specified in argument
+
 template <typename P>
 int Image<P>::GreatestPopDist(const int& channel /*=0*/) const
 {
@@ -747,7 +731,6 @@ int Image<P>::GreatestPopDist(const int& channel /*=0*/) const
 }
 
 
-/// Don't forget to comment
 template<typename P>
 Image<P> Image<P>::AddMirrorBoundary(const int& left, const int& right, const int& top, const int& bot) const
 {
