@@ -13,20 +13,28 @@
 
 
 HistogramBW::HistogramBW(const Image<PixelBW>& subject)
-: Image<PixelBW>(512, 300, 255, "histogram"+subject.GetName(), "no")
+: Image<PixelBW>(512, 300, 255, "histogram"+subject.GetName())
 {
+	// Controls that max intensity is not above 255, otherwise it creates a copy of
+	// the subject and rescale it
+	Image<PixelBW> good_subject(subject);
+	if (subject.MaxI() > 255)
+	{
+		good_subject.Rescale();
+	}
+
 	// Computes the max number of pixels that have the same intensity
-	int greatest_pop_dist=subject.GreatestPopDist();
+	int greatest_pop_dist=good_subject.GreatestPopDist(0);
 
 	// Computes the ratio that scale the max intensity such that the max peak of the
 	// histogram reaches (4/5) of the height.
 	double ratio=0.8*(double)mheight/(double)greatest_pop_dist;
 	int nb_pixel;
 	int col;
-	std::vector<int> subject_distrib=subject.GetDistribution();
+	mdistributionBW=good_subject.ComputeDistribution(0);
 	for(int i=0; i<256; i++)
 	{
-		nb_pixel=(int)((double)subject_distrib[i]*ratio);
+		nb_pixel=(int)((double)mdistributionBW[i]*ratio);
 		for (int k=0; k<nb_pixel; k++)
 		{
 			//std::cout << i << "\t" << k << "\n";
@@ -37,6 +45,12 @@ HistogramBW::HistogramBW(const Image<PixelBW>& subject)
 	}
 }
 
+
+/// Method that returns the distribution of the distribution
+std::vector<int> HistogramBW::GetDistribution()
+{
+	return mdistributionBW;
+}
 
 
 

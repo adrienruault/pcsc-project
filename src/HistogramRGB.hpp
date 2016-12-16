@@ -13,8 +13,14 @@
 class HistogramRGB
 : public Image<PixelRGB>
 {
+private:
+	std::vector<int> mdistributionR;
+	std::vector<int> mdistributionG;
+	std::vector<int> mdistributionB;
 public:
 	HistogramRGB(const Image<PixelRGB>& subject);
+
+	std::vector<int> GetDistribution(const int& channel=0) const;
 };
 
 

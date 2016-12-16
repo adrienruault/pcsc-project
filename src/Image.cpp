@@ -9,7 +9,7 @@ using namespace cimg_library;
 /// not provided.
 /// It names the image with the provided name.
 template<typename P>
-Image<P>::Image(const int& width, const int& height, const double& intensity /*=0*/, const std::string& name /*="undefined.jpg"*/, const std::string& compute_distrib /*="no"*/)
+Image<P>::Image(const int& width, const int& height, const double& intensity /*=0*/, const std::string& name /*="undefined.jpg"*/)
 {
 	if (typeid(P)==typeid(PixelBW))
 	{
@@ -51,62 +51,12 @@ Image<P>::Image(const int& width, const int& height, const double& intensity /*=
 			}
 		}
 	}
-	if (compute_distrib=="yes")
-	{
-		// This exception use is only available when creating an image by our own
-		if (intensity>255)
-		{
-			throw ErrorDistribution("too_high_intensity");
-		}
-
-		/* Seems to be dangerous to reserve
-		mdistribution.reserve(mspectra);
-		for(int c=0; c<mspectra; c++)
-		{
-			mdistribution[c].reserve(257);
-		}
-		*/
-
-		// Computation of the distribution array
-		// Initialisation at 0
-		for(int c=0; c<mspectra; c++)
-		{
-			mdistribution.push_back(std::vector<int>(257,0));
-		}
-
-		// Filling of mdistribution
-		for(int i=0; i<mwidth; i++)
-		{
-			for(int j=0; j<mheight; j++)
-			{
-				for(int c=0; c<mspectra; c++)
-				{
-					int k=mPmatrix[i][j][c];
-					mdistribution[c][k]+=1;
-				}
-			}
-		}
-
-		// Last element set to 1 signals that mdistribution[c] is up-to-date
-		for(int c=0; c<mspectra; c++)
-		{
-			mdistribution[c][256]=1;
-		}
-	}
-	else
-	{
-		//mdistribution.reserve(mspectra);
-		for(int c=0; c<mspectra; c++)
-		{
-			mdistribution.push_back(std::vector<int>(1,0));
-		}
-	}
 }
 
 
 /// Constructor that...
 template <typename P>
-Image<P>::Image(const std::string& name, const std::string& compute_distrib /*="no"*/)
+Image<P>::Image(const std::string& name)
 {
 	// In the future: try to implement a control on the string name
 	// to verify that it is a JPG file
@@ -169,17 +119,9 @@ Image<P>::Image(const std::string& name, const std::string& compute_distrib /*="
 		}
 	}
 
-
+	/*
 	if (compute_distrib=="yes")
 	{
-		/* Seems to be dangerous to reserve
-		mdistribution.reserve(mspectra);
-		for(int c=0; c<mspectra; c++)
-		{
-			mdistribution[c].reserve(257);
-		}
-		*/
-
 		// Computation of the distribution array
 		// Initialisation at 0
 
@@ -215,6 +157,57 @@ Image<P>::Image(const std::string& name, const std::string& compute_distrib /*="
 			mdistribution.push_back(std::vector<int>(1,0));
 		}
 	}
+	*/
+}
+
+
+/// Constructor that takes as input a vector of vector of double to build an image
+template <typename P>
+Image<P>::Image(const std::vector<std::vector<double> > intensity_array)
+{
+
+	if (typeid(P)==typeid(PixelBW))
+	{
+		mspectra=1;
+	}
+	else if (typeid(P)==typeid(PixelRGB))
+	{
+		mspectra=3;
+	}
+	else
+	{
+		throw ErrorPixelType();
+	}
+
+	mname="undefined";
+
+	// Definition of dimensions attributes (initialized to 100 pixels by default)
+	mwidth=intensity_array.size();
+	mheight=intensity_array[0].size();
+
+
+
+	for (int i=0; i<mwidth; i++)
+	{
+		mPmatrix.push_back(std::vector<P>(mheight));
+		for (int j=0; j<mheight; j++)
+		{
+			// Set channels to 0 intensity
+			for(int c=0; c<mspectra; c++)
+			{
+				mPmatrix[i][j][c]=intensity_array[i][j];
+			}
+		}
+	}
+
+
+	/*
+	//mdistribution.reserve(mspectra);
+	for(int c=0; c<mspectra; c++)
+	{
+		mdistribution.push_back(std::vector<int>(1,0));
+	}
+	*/
 }
 
 
@@ -228,7 +221,7 @@ Image<P>::Image(const Image<P>& image_to_copy)
 	mheight=image_to_copy.mheight;
 
 	mPmatrix=image_to_copy.mPmatrix;
-	mdistribution=image_to_copy.mdistribution;
+	//mdistribution=image_to_copy.mdistribution;
 }
 
 
@@ -260,7 +253,7 @@ template <typename P>
 Image<P>::Image(const Fourier_Transform<Image<P > >& fft )
 {
 	int N1 = (fft.getrealPart()).Width();
-  int N2 = (fft.getrealPart()).Height();
+	int N2 = (fft.getrealPart()).Height();
 	Image<P> im = fft.getimPart();
 	Image<P> real  = fft.getrealPart();
 	im.shift_zero_to_center();
@@ -312,11 +305,13 @@ double& Image<P>::operator()(const int& x, const int& y, const int& channel /*=0
 		{
 			throw ErrorChannel(mspectra);
 		}
+		/*
 		// checking if mdistribution has been computed
 		if(mdistribution[channel].size()==257)
 		{
 			mdistribution[channel][256]=0;
 		}
+		*/
 		return mPmatrix[x][y][channel];
 	}
 	else
@@ -413,6 +408,37 @@ void Image<P>::Display() const
 }
 
 
+/// Method that displays the image under the name provided in argument
+template<typename P>
+void Image<P>::Display(const std::string& save_name) const
+{
+	// Declare image using CImg library
+	CImg<double> img(mwidth,mheight,1,mspectra,0);
+
+	// Transfer of the pixel value intensity
+	for (int i=0; i<mwidth; i++)
+	{
+		for (int j=0; j<mheight; j++)
+		{
+			for(int c=0; c<mspectra; c++)
+			{
+				img(i,j,0,c)=mPmatrix[i][j][c];
+			}
+		}
+	}
+
+	// Convert mname which is a string in const char*
+	const char* char_name = save_name.c_str();
+	CImgDisplay disp_img(img,char_name);
+	// Seems to be mandatory to wait for the user to close
+	//the displayed image to keep going
+	while (!disp_img.is_closed())
+	{
+		disp_img.wait();
+	}
+}
+
+
 /// Method that saves the image with the provided name
 /// The facilities provided by the CImg library are used here
 template<typename P>
@@ -473,54 +499,52 @@ void Image<P>::SetI(const double& new_intensity)
 			mPmatrix[i][j][0]=new_intensity;
 		}
 	}
+	/*
 	// Last element signals that mdistribution is out-dated
 	for(int c=0; c<mspectra; c++)
 	{
 		mdistribution[c][256]=0;
 	}
+	*/
 }
 
 
-/// Method that creates a distribution if not computed
+/// Method that computes the distribution for the channel specified in argument
 template <typename P>
-void Image<P>::CreateDistribution()
+std::vector<int> Image<P>::ComputeDistribution(const int& channel /*=0*/) const
 {
-	if(mdistribution[0].size() != 257)
+	if (channel < 0 or channel >= mspectra)
 	{
-		throw ErrorDistribution("not_computed");
+		throw ErrorChannel(mspectra);
 	}
 
-	// Reassign the mdistribution vector so that it has dimension 3x257 and 0 value
-	std::vector<std::vector<int> > new_distrib;
-	for(int c=0; c<mspectra; c++)
+	// Controls that the maximum intensity is not above 255
+	double max_intensity=(*this).MaxI();
+	if (max_intensity>255)
 	{
-		new_distrib.push_back(std::vector<int>(257,0));
+		throw ErrorDistribution("too_high_intensity");
 	}
-	mdistribution=new_distrib;
+
+	// Reassign the mdistribution vector so that it has dimension 256 and 0 value
+	std::vector<int> distribution(256,0);
 
 	// Calculation of distribution
 	for(int i=0; i<mwidth; i++)
 	{
 		for(int j=0; j<mheight; j++)
 		{
-			for(int c=0; c<mspectra; c++)
-			{
-				int k=mPmatrix[i][j][c];
-				mdistribution[c][k]+=1;
-			}
+			int k=mPmatrix[i][j][channel];
+			distribution[k]+=1;
+
 		}
 	}
-
-	// Last element set to 1 signals that mdistribution[c] is up-to-date
-	for(int c=0; c<mspectra; c++)
-	{
-		mdistribution[c][256]=1;
-	}
+	return distribution;
 }
 
+/*
 /// Method that sends the distribution of the channel provided in argument
 template <typename P>
-std::vector<int> Image<P>::GetDistribution(const int& channel /*=0*/) const
+std::vector<int> Image<P>::GetDistribution(const int& channel */ /*=0*//*) const
 {
 	// Controls if the distribution is computed
 	if (mdistribution[channel].size() != 257)
@@ -540,12 +564,14 @@ std::vector<int> Image<P>::GetDistribution(const int& channel /*=0*/) const
 	}
 	return mdistribution[channel];
 }
+*/
 
 /// Method that updates the distribution array for a particular channel provided in
 /// argument.
 /// If the distribution is not computed, call CreateDistribution() to compute it
+/*
 template<typename P>
-void Image<P>::UpdateDistribution(const int& channel /*=0*/)
+void Image<P>::UpdateDistribution(const int& channel */ /*=0*/ /*)
 {
 	if (channel < 0 or channel >= mspectra)
 	{
@@ -582,6 +608,7 @@ void Image<P>::UpdateDistribution(const int& channel /*=0*/)
 	// Last element signals that mdistribution is up-to-date:
 	mdistribution[channel][256]=1;
 }
+*/
 
 
 /// Methods that output the maximum pixel intensity of the image over all possible channels
@@ -647,12 +674,20 @@ void Image<P>::Rescale()
 			}
 		}
 	}
-
-	for(int c=0; c<mspectra; c++)
-	{
-		mdistribution[c][256]=0;
-	}
 }
+
+
+/// Method that returns an image that is rescaled so that the minimum intensity is 0
+/// and the maximum intensity is 255
+template<typename P>
+Image<P> Image<P>::RescaledCopy() const
+{
+	Image<P> subject(*this);
+	subject.Rescale();
+
+	return subject;
+}
+
 
 template<typename P>
 Image<P> Image<P>::log_Rescale() const
@@ -671,7 +706,8 @@ Image<P> Image<P>::log_Rescale() const
 }
 
 
-/// Method that returns
+/// Method that returns the greatest number of pixels associated to the same intensity
+/// for the channel specified in argument
 template <typename P>
 int Image<P>::GreatestPopDist(const int& channel /*=0*/) const
 {
@@ -680,7 +716,7 @@ int Image<P>::GreatestPopDist(const int& channel /*=0*/) const
 	{
 		throw ErrorChannel(mspectra);
 	}
-
+	/*
 	// Check if distribution has been computed
 	if (mdistribution[channel].size() != 257)
 	{
@@ -688,18 +724,23 @@ int Image<P>::GreatestPopDist(const int& channel /*=0*/) const
 		throw ErrorDistribution("not_computed");
 	}
 
+
 	// Check if distribution is up-to-date
 	if (mdistribution[channel][256] != 1)
 	{
 		// too_high_intensity / not_computed / out-dated
 		throw ErrorDistribution("out-dated");
 	}
+	*/
+
+	std::vector<int> distribution=(*this).ComputeDistribution(channel);
+
 	int greatest_pop=0;
 	for(int i=0; i<256; i++)
 	{
-		if (mdistribution[channel][i]>greatest_pop)
+		if (distribution[i]>greatest_pop)
 		{
-			greatest_pop=mdistribution[channel][i];
+			greatest_pop=distribution[i];
 		}
 	}
 	return greatest_pop;
@@ -768,8 +809,9 @@ void Image<P>::shift_zero_to_center()
 		}
 	}
 
-  //I img_shifted(N1,N2,0);
+
 	(*this) = img_shifted;
+
 }
 
 template class Image<PixelBW>;

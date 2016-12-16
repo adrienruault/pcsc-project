@@ -44,13 +44,16 @@ protected:
 
 	/// Array with one entry for each channel that contains the number of pixels
 	/// associated to each intensity
-	std::vector<std::vector<int> > mdistribution;
+	//std::vector<std::vector<int> > mdistribution;
 
 public:
-	Image(const int& width, const int& height, const double& intensity=0, const std::string& name="undefined.jpg", const std::string& compute_distrib="no");
-	Image(const std::string& name, const std::string& compute_distrib="no");
+
+	Image(const int& width, const int& height, const double& intensity=0, const std::string& name="undefined.jpg");
+	Image(const std::string& name);
 	Image(const Fourier_Transform< Image<P> >& fft );
-	Image(){}
+	Image(const std::vector<std::vector<double> > intensity_array);
+	Image(){mheight=0; mwidth=0; mspectra=0;};
+
 
 	Image(const Image<P>& image_to_copy);
 
@@ -67,6 +70,7 @@ public:
 	int GetSpectra() const;
 
 	void Display() const;
+	void Display(const std::string& save_name) const;
 	void Save() const;
 	void Save(const std::string& save_name) const;
 	void SetI(const double& new_intensity);
@@ -77,9 +81,10 @@ public:
 	// This rescale just multiply all pixel intensities by a factor computed such that
 	// the highest intensity is fit to 255
 	void Rescale();
-	void CreateDistribution();
-	std::vector<int> GetDistribution(const int& channel=0) const;
-	void UpdateDistribution(const int& channel=0);
+	Image<P> RescaledCopy() const;
+	std::vector<int> ComputeDistribution(const int& channel=0) const;
+	//std::vector<int> GetDistribution(const int& channel=0) const;
+	//void UpdateDistribution(const int& channel=0);
 	int GreatestPopDist(const int& channel=0) const;
 
 	Image<P> AddMirrorBoundary(const int& left, const int& right, const int& top, const int& bot) const;

@@ -22,7 +22,7 @@ public:
   Fourier_Transform( const std::vector<std::vector< std::vector<ComplexNumber > > >&  vec);
 
   void Display() const;
-  //I shift_zero_to_center(const I& img) const; // now in Image class
+  void Display(const std::string& save_name) const;
 
   I getArgument() const;
   I getModulus() const;
@@ -80,8 +80,8 @@ std::vector<ComplexNumber> Fourier_Transform<I>::fft_1D(const std::vector<Comple
 /// a Fourier_Transform object.
 template<typename I>
 Fourier_Transform<I>::Fourier_Transform( const I& img)
-  //        :realPart(img.Width(),img.Height()), imPart(img.Width(),img.Height()),
-    //       modulus(img.Width(),img.Height()), argument(img.Width(),img.Height())
+          //:realPart(img.Width(),img.Height()), imPart(img.Width(),img.Height()),
+           //modulus(img.Width(),img.Height()), argument(img.Width(),img.Height())
 {
   int N1 = img.Width();
   int N2 = img.Height();
@@ -184,6 +184,12 @@ template<typename I>
 void Fourier_Transform<I>::Display() const
 {
   (modulus.log_Rescale()).Display();
+}
+
+template<typename I>
+void Fourier_Transform<I>::Display(const std::string& save_name) const
+{
+  (modulus.log_Rescale()).Display(save_name);
 }
 
 template<typename I>

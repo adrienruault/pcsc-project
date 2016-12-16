@@ -36,10 +36,10 @@ int main(int argc, char* argv[])
 	std::vector<std::vector<double> > tab_test_high;
 	std::vector<std::vector<double> > tab_test_band;
 
-	int width=18;
-	int height=18;
+	int width=10;
+	int height=10;
 
-	tab_test_low=hanning_low_pass(width, height, 4, 1);
+	tab_test_low=hanning_low_pass(width, height, 3, 1);
 	tab_test_high=hanning_high_pass(width, height, 4, 1);
 	tab_test_band=hanning_band_pass(width, height, 3, 6, 1);
 
@@ -106,8 +106,8 @@ std::vector<std::vector <double> > hanning_low_pass(int width, int height, doubl
 		//for(int j=-height/2; j<height/2+1; j++)
 		for(int j=0; j<height; j++)
 		{
-			x_coo=i-(width/2)+0.5;
-			y_coo=j-(height/2)+0.5;
+			x_coo=i-(width/2);
+			y_coo=j-(height/2);
 			norm = sqrt(x_coo*x_coo+y_coo*y_coo);
 			if (norm <= cut_off-sharpness)
 			{
